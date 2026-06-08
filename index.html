@@ -1,307 +1,956 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔒 加密文件</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #1e293b; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>mdlock viewer — 即時 Markdown 預覽 × 加密文件閱讀</title>
+  <meta name="description" content="mdlock viewer：在線 Markdown 即時編輯預覽，支援 AES-256-GCM 加密文件解密閱讀，純前端、無後端。" />
+  <meta name="author" content="wenhsi" />
+  <link rel="canonical" href="https://wenhsi.github.io/mdlock-viewer/" />
+  <!-- Author / contact -->
+  <meta name="creator" content="wenhsi" />
+  <!-- Apple touch icons -->
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='110'>🔒</text></svg>" />
+  <link rel="apple-touch-icon" sizes="152x152"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 152'><rect width='152' height='152' rx='32' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='92'>🔒</text></svg>" />
+  <link rel="apple-touch-icon" sizes="120x120"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='26' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='74'>🔒</text></svg>" />
+  <!-- Favicon / bookmark thumbnail -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e1e1e'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
+  <link rel="shortcut icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e1e1e'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wenhsi.github.io/mdlock-viewer/" />
+  <meta property="og:title" content="mdlock viewer" />
+  <meta property="og:description" content="即時 Markdown 預覽 × AES-256-GCM 加密文件閱讀，純前端無後端。" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mdlock viewer" />
+  <meta name="twitter:description" content="即時 Markdown 預覽 × 加密文件閱讀" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="mdlock" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <!-- GitHub + contact -->
+  <meta name="github" content="https://github.com/wenhsi" />
+  <meta name="contact" content="kevinwen2014@gmail.com" />
+  <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'><rect width='1200' height='630' fill='%231e1e1e'/><text x='50%25' y='46%25' dominant-baseline='middle' text-anchor='middle' font-size='120' fill='%23cccccc' font-family='system-ui'>🔒 mdlock viewer</text><text x='50%25' y='65%25' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23858585' font-family='system-ui'>即時 Markdown 預覽 × AES-256-GCM 加密文件閱讀</text></svg>" />
 
-/* ── States ── */
-#state-loading,
-#state-lock,
-#state-error,
-#state-content { display: none; }
+  <style>
+/* ── Variables ──────────────────────────────────────────────── */
+:root {
+  --bg:         #1e1e1e;
+  --bg-deep:    #141414;
+  --surface:    #252526;
+  --border:     #3c3c3c;
+  --border-2:   #505050;
+  --text:       #cccccc;
+  --text-dim:   #858585;
+  --muted:      #555555;
+  --accent:     #7b68f0;
+  --accent-h:   #6455d8;
+  --green:      #4ec994;
+  --red:        #f47069;
+  --ed-bg:      #1e1e1e;
+  --ed-fg:      #d4d4d4;
+  --nav-h:      52px;
+  --radius:     8px;
+  --reading-w:  680px;
+}
+[data-theme="light"] {
+  --bg:         #ffffff;
+  --bg-deep:    #f5f5f5;
+  --surface:    #f0f0f0;
+  --border:     #dcdcdc;
+  --border-2:   #c0c0c0;
+  --text:       #1f1f1f;
+  --text-dim:   #5a5a5a;
+  --muted:      #a0a0a0;
+  --accent:     #5b4ff4;
+  --accent-h:   #4840cc;
+  --green:      #2e9e68;
+  --red:        #cc3333;
+  --ed-bg:      #ffffff;
+  --ed-fg:      #1f1f1f;
+}
 
-/* ── Loading ── */
-#state-loading {
-  min-height: 100vh;
-  align-items: center; justify-content: center;
-  flex-direction: column; gap: 1rem;
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; font-size: 15px; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text);
+  height: 100%; min-height: 100dvh;
+  -webkit-text-size-adjust: 100%;
+  transition: background .2s, color .2s;
 }
-.spinner {
-  width: 40px; height: 40px;
-  border: 3px solid #334155;
-  border-top-color: #6366f1;
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { color: #64748b; font-size: .9rem; }
+input, textarea, button { font-family: inherit; font-size: inherit; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
 
-/* ── Lock ── */
-#state-lock {
-  min-height: 100vh;
-  align-items: center; justify-content: center;
-  padding: 1rem;
+/* ── Nav ────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--nav-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 1rem;
+  padding-left:  max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  gap: .5rem;
 }
-.card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 16px;
-  padding: 2.5rem;
-  max-width: 400px; width: 100%;
-  text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,.5);
+.nav-logo {
+  font-size: .9375rem; font-weight: 700; letter-spacing: -.01em;
+  color: var(--text); text-decoration: none; white-space: nowrap; margin-right: .25rem;
 }
-.lock-icon { font-size: 3.5rem; margin-bottom: 1.25rem; animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-.card h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: .375rem; }
-.card p { color: #64748b; font-size: .9rem; margin-bottom: 2rem; }
-.inp-wrap { position: relative; margin-bottom: .875rem; }
-.inp-wrap input {
-  width: 100%; padding: .8rem 2.75rem .8rem 1rem;
-  background: #0f172a; border: 1px solid #334155; border-radius: 10px;
-  color: #e2e8f0; font-size: 1rem; outline: none;
-  transition: border-color .2s;
-  font-family: inherit;
-}
-.inp-wrap input:focus { border-color: #6366f1; }
-.eye {
-  position: absolute; right: .85rem; top: 50%; transform: translateY(-50%);
-  cursor: pointer; color: #475569; font-size: 1rem; user-select: none;
-}
-.eye:hover { color: #94a3b8; }
-.unlock-btn {
-  width: 100%; padding: .85rem;
-  background: #6366f1; color: #fff; border: none;
-  border-radius: 10px; font-size: 1rem; font-weight: 600;
-  cursor: pointer; transition: background .2s, transform .1s;
-  font-family: inherit;
-}
-.unlock-btn:hover { background: #4f46e5; }
-.unlock-btn:active { transform: scale(.97); }
-.unlock-btn:disabled { background: #334155; color: #475569; cursor: default; transform: none; }
-.err { color: #f87171; font-size: .85rem; margin-top: .75rem; min-height: 1.2em; }
+.nav-logo em { font-style: normal; color: var(--accent); }
+.nav-spacer { flex: 1; }
 
-/* ── Error ── */
-#state-error {
-  min-height: 100vh;
-  align-items: center; justify-content: center;
-  padding: 1rem; text-align: center; flex-direction: column; gap: .75rem;
+/* Mobile view-toggle pill */
+.view-toggle-pill {
+  display: none;           /* shown only on mobile */
+  align-items: center;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 999px; overflow: hidden; flex-shrink: 0;
 }
-.err-icon { font-size: 3rem; }
-.err-title { font-size: 1.25rem; font-weight: 700; }
-.err-msg { color: #64748b; font-size: .875rem; max-width: 360px; }
+.view-toggle-pill button {
+  padding: .3rem .75rem; border: none; background: none;
+  color: var(--text-dim); font-size: .78rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.view-toggle-pill button.active {
+  background: var(--accent); color: #fff;
+}
 
-/* ── Content ── */
-#state-content { padding: 3rem 1.5rem; max-width: 860px; margin: 0 auto; }
-.content-bar {
-  display: flex; align-items: center; gap: .75rem;
-  margin-bottom: 2.5rem; padding-bottom: 1.5rem;
-  border-bottom: 1px solid #1e293b;
+/* Icon button (theme toggle) */
+.icon-btn {
+  width: 34px; height: 34px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: none;
+  color: var(--text-dim); font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s, border-color .15s; flex-shrink: 0;
 }
-.unlocked-badge {
-  font-size: .8rem; color: #4ade80;
-  background: rgba(74,222,128,.1);
-  padding: .25rem .75rem; border-radius: 999px;
-  border: 1px solid rgba(74,222,128,.2);
-}
-.tool-btn {
-  padding: .3rem .8rem;
-  background: #1e293b; border: 1px solid #334155; border-radius: 7px;
-  color: #94a3b8; font-size: .78rem; cursor: pointer;
+.icon-btn:hover { background: var(--border); color: var(--text); }
+
+/* Decrypt button */
+.open-btn {
+  display: flex; align-items: center; gap: .35rem;
+  padding: .38rem .85rem; border-radius: var(--radius);
+  border: 1px solid var(--border); background: none;
+  color: var(--text-dim); font-size: .8125rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
   transition: background .15s, color .15s, border-color .15s;
 }
-.tool-btn:hover { background: #334155; color: #e2e8f0; }
-.tool-btn.active { background: #6366f1; border-color: #6366f1; color: #fff; }
-.tool-btn.copied { background: #16a34a; border-color: #16a34a; color: #fff; }
+.open-btn:hover { background: var(--border); color: var(--text); }
+.open-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.open-btn .btn-label { display: inline; }
 
-/* ── Markdown ── */
-.md { line-height: 1.75; font-size: 1rem; }
-.md h1,.md h2,.md h3,.md h4 { margin: 2rem 0 .75rem; font-weight: 700; line-height: 1.3; }
-.md h1 { font-size: 2rem; border-bottom: 1px solid #1e293b; padding-bottom: .5rem; }
-.md h2 { font-size: 1.5rem; }
-.md h3 { font-size: 1.25rem; }
-.md h4 { font-size: 1rem; }
-.md p { margin-bottom: 1rem; }
-.md a { color: #818cf8; text-decoration: none; }
+/* ── Gist panel ─────────────────────────────────────────────── */
+#gistPanel {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  overflow: hidden; max-height: 0;
+  transition: max-height .22s ease, padding .22s ease;
+}
+#gistPanel.open          { max-height: 100px; }
+#gistPanel.open.has-more { max-height: 145px; }
+.gist-inner {
+  max-width: 640px; margin: 0 auto; padding: .75rem 1rem .5rem;
+  display: flex; gap: .5rem; align-items: center;
+  padding-left:  max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+#gistInput {
+  flex: 1; min-width: 0;
+  padding: .6rem .875rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); font-size: .875rem; outline: none;
+  transition: border-color .2s;
+}
+#gistInput:focus { border-color: var(--accent); }
+#gistInput::placeholder { color: var(--muted); }
+.gist-go {
+  padding: .6rem 1.1rem; background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius); font-size: .875rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: background .15s; flex-shrink: 0;
+}
+.gist-go:hover { background: var(--accent-h); }
+.gist-go:disabled { background: var(--border); color: var(--muted); cursor: default; }
+.gist-hint { font-size: .72rem; color: var(--muted); text-align: center; margin: .2rem 0 .55rem; }
+
+/* Fixed-width toggle buttons — ghost span reserves space of longest label */
+.ab-btn-fixed {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+}
+.ab-btn-fixed .btn-ghost {
+  visibility: hidden; pointer-events: none; white-space: nowrap;
+}
+.ab-btn-fixed .btn-real {
+  position: absolute; white-space: nowrap;
+}
+
+/* ── Screens ─────────────────────────────────────────────────── */
+.screen { display: none; }
+.screen.active { display: flex; }
+
+/* ── Editor screen ───────────────────────────────────────────── */
+#screen-editor {
+  flex-direction: column;
+  height: calc(100dvh - var(--nav-h));
+}
+
+/* Desktop split */
+.editor-split {
+  flex: 1; display: flex; overflow: hidden;
+  min-height: 0;
+}
+.split-pane { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.split-pane + .split-pane { border-left: 1px solid var(--border); }
+.pane-label {
+  padding: .45rem 1.125rem;
+  font-size: .7rem; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+}
+#mdEditor {
+  flex: 1; resize: none; outline: none;
+  background: var(--ed-bg); color: var(--ed-fg);
+  border: none; padding: 1.25rem 1.375rem;
+  font-family: 'Fira Code', 'SF Mono', 'Consolas', 'Menlo', monospace;
+  font-size: .875rem; line-height: 1.75; tab-size: 2;
+  transition: background .2s, color .2s;
+}
+.preview-scroll { flex: 1; overflow-y: auto; }
+.preview-body { padding: 1.5rem 1.75rem; }
+
+/* Mobile single pane */
+.mobile-editor { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+.m-pane { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+.m-pane.active { display: flex; }
+#mdEditorM {
+  flex: 1; resize: none; outline: none;
+  background: var(--ed-bg); color: var(--ed-fg);
+  border: none; padding: 1rem 1.125rem;
+  font-family: 'Fira Code', 'SF Mono', 'Consolas', monospace;
+  font-size: .875rem; line-height: 1.75; tab-size: 2;
+  transition: background .2s, color .2s;
+}
+.m-preview-scroll { flex: 1; overflow-y: auto; }
+.m-preview-body { padding: 1.25rem 1.125rem; }
+
+/* ── Loading ─────────────────────────────────────────────────── */
+#screen-loading {
+  min-height: calc(100dvh - var(--nav-h));
+  align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+}
+.spinner {
+  width: 32px; height: 32px;
+  border: 2.5px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-txt { color: var(--text-dim); font-size: .875rem; }
+
+/* ── Lock screen ─────────────────────────────────────────────── */
+#screen-lock {
+  min-height: calc(100dvh - var(--nav-h));
+  align-items: center; justify-content: center; padding: 1.5rem;
+}
+.lock-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 2.25rem 2rem;
+  max-width: 380px; width: 100%; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+[data-theme="light"] .lock-card { box-shadow: 0 8px 40px rgba(0,0,0,.1); }
+.lock-icon { font-size: 2.75rem; margin-bottom: 1rem; animation: pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.lock-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
+.lock-card p  { color: var(--text-dim); font-size: .875rem; margin-bottom: 1.625rem; line-height: 1.6; }
+.lock-meta {
+  font-size: .72rem; color: var(--muted); font-family: monospace;
+  margin-bottom: 1.25rem; word-break: break-all; text-align: left;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: .45rem .7rem;
+}
+.inp-wrap { position: relative; margin-bottom: .75rem; }
+.inp-wrap input {
+  width: 100%; padding: .72rem 2.5rem .72rem .9rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); font-size: .9375rem; outline: none;
+  transition: border-color .2s, background .2s;
+}
+.inp-wrap input:focus { border-color: var(--accent); }
+.inp-wrap input::placeholder { color: var(--muted); }
+.eye {
+  position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
+  cursor: pointer; color: var(--muted); user-select: none; font-size: .9rem;
+  transition: color .15s;
+}
+.eye:hover { color: var(--text-dim); }
+.unlock-btn {
+  width: 100%; padding: .78rem; border: none; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-size: .9375rem; font-weight: 600;
+  cursor: pointer; transition: background .15s; letter-spacing: .01em;
+}
+.unlock-btn:hover { background: var(--accent-h); }
+.unlock-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+.form-err { color: var(--red); font-size: .8rem; margin-top: .6rem; min-height: 1em; text-align: left; }
+.back-link {
+  display: inline-block; margin-top: 1.125rem;
+  color: var(--muted); font-size: .8rem; cursor: pointer;
+  text-decoration: none; transition: color .15s;
+}
+.back-link:hover { color: var(--text-dim); }
+
+/* ── Decrypted screen ────────────────────────────────────────── */
+#screen-decrypted { flex-direction: column; min-height: calc(100dvh - var(--nav-h)); }
+
+.action-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: .55rem 1rem;
+  padding-left:  max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+}
+.action-bar-left  { display: flex; align-items: center; gap: .5rem; }
+.action-bar-right { margin-left: auto; display: flex; gap: .4rem; }
+.ab-back {
+  padding: .3rem .65rem; border-radius: var(--radius); border: 1px solid var(--border);
+  background: none; color: var(--text-dim); font-size: .8rem; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.ab-back:hover { background: var(--border); color: var(--text); }
+.chip-unlocked {
+  font-size: .72rem; color: var(--green);
+  background: rgba(78,201,148,.1); padding: .2rem .6rem;
+  border-radius: 999px; border: 1px solid rgba(78,201,148,.2); white-space: nowrap;
+}
+.ab-btn {
+  padding: .3rem .75rem; border-radius: var(--radius); border: 1px solid var(--border);
+  background: none; color: var(--text-dim); font-size: .8rem; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.ab-btn:hover { background: var(--border); color: var(--text); }
+.ab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ab-btn.done   { background: var(--green); border-color: var(--green); color: #fff; }
+
+/* Decrypted reading area */
+.reading-area { flex: 1; overflow-y: auto; }
+.reading-inner { max-width: var(--reading-w); margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+/* Raw source area */
+#rawSourceArea {
+  flex: 1; overflow-y: auto; background: var(--bg);
+}
+.raw-source-inner {
+  max-width: var(--reading-w); margin: 0 auto; padding: 1.5rem;
+}
+#rawSourcePre {
+  font-family: 'Fira Code', 'SF Mono', 'Consolas', monospace;
+  font-size: .875rem; line-height: 1.75; color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* ── Markdown styles ─────────────────────────────────────────── */
+.md { line-height: 1.8; color: var(--text); font-size: 1rem; }
+.md > *:first-child { margin-top: 0 !important; }
+.md h1 { font-size: 1.75rem; font-weight: 700; margin: 2rem 0 .875rem; line-height: 1.3; border-bottom: 1px solid var(--border); padding-bottom: .5rem; }
+.md h2 { font-size: 1.375rem; font-weight: 700; margin: 1.75rem 0 .75rem; line-height: 1.35; }
+.md h3 { font-size: 1.125rem; font-weight: 600; margin: 1.5rem 0 .6rem; }
+.md h4 { font-size: 1rem;     font-weight: 600; margin: 1.25rem 0 .5rem; }
+.md p  { margin-bottom: 1rem; }
+.md a  { color: var(--accent); text-decoration: none; }
 .md a:hover { text-decoration: underline; }
-.md ul,.md ol { padding-left: 1.75rem; margin-bottom: 1rem; }
-.md li { margin-bottom: .25rem; }
-.md blockquote { border-left: 3px solid #6366f1; padding: .5rem 1rem; background: #1e293b; border-radius: 0 8px 8px 0; margin-bottom: 1rem; color: #94a3b8; }
-.md code { background: #1e293b; padding: .15em .45em; border-radius: 5px; font-family: 'SF Mono','Fira Code',monospace; font-size: .875em; color: #a5b4fc; }
-.md pre { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1.25rem; overflow-x: auto; margin-bottom: 1rem; }
-.md pre code { background: none; padding: 0; font-size: .875rem; color: #e2e8f0; }
-.md table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: .9rem; }
-.md th,.md td { border: 1px solid #334155; padding: .6rem 1rem; text-align: left; }
-.md th { background: #1e293b; font-weight: 600; }
-.md tr:nth-child(even) { background: rgba(30,41,59,.5); }
-.md hr { border: none; border-top: 1px solid #1e293b; margin: 2rem 0; }
-.md img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+.md ul, .md ol { padding-left: 1.625rem; margin-bottom: 1rem; }
+.md li { margin-bottom: .3rem; }
+.md li > p { margin-bottom: .25rem; }
+.md blockquote {
+  border-left: 3px solid var(--accent); padding: .5rem 1rem;
+  background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 1rem; color: var(--text-dim);
+}
+.md code {
+  background: var(--surface); padding: .15em .4em;
+  border-radius: 4px; font-size: .84em;
+  font-family: 'Fira Code','SF Mono','Consolas',monospace; color: var(--text);
+  border: 1px solid var(--border);
+}
+.md pre {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.125rem 1.25rem;
+  overflow-x: auto; margin-bottom: 1rem;
+}
+.md pre code { background: none; padding: 0; font-size: .875rem; border: none; color: var(--ed-fg); }
+.md table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: .9375rem; }
+.md th, .md td { border: 1px solid var(--border); padding: .55rem 1rem; text-align: left; }
+.md th { background: var(--surface); font-weight: 600; }
+.md tr:nth-child(even) { background: rgba(128,128,128,.04); }
+.md hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+.md img { max-width: 100%; border-radius: var(--radius); display: block; margin: 1.25rem 0; }
 .md strong { font-weight: 700; }
-</style>
+.md em { font-style: italic; }
+
+.md-empty { color: var(--muted); font-size: .875rem; font-style: italic; }
+
+/* ── Editor copy row ─────────────────────────────────────────── */
+.editor-copy-row {
+  display: flex; justify-content: flex-end; gap: .4rem;
+  padding: .35rem .625rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+}
+.ec-btn {
+  padding: .2rem .65rem; border-radius: 5px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-dim); font-size: .75rem; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.ec-btn:hover  { background: var(--border); color: var(--text); }
+.ec-btn.done   { background: var(--green); border-color: var(--green); color: #fff; }
+
+/* ── RWD: Mobile first ───────────────────────────────────────── */
+@media (max-width: 767px) {
+  .editor-split { display: none !important; }
+  .mobile-editor { display: flex; }
+  .view-toggle-pill { display: flex; }
+  .open-btn .btn-label { display: none; }
+
+  .action-bar { flex-wrap: nowrap; }
+  .action-bar-right { margin-left: auto; }
+  .chip-unlocked { display: none; }  /* nav 的 📄 按鈕已表達，手機版省略 */
+
+  .reading-inner { padding: 1.5rem 1rem; }
+  .raw-source-inner { padding: 1rem; }
+
+  .lock-card { padding: 1.875rem 1.375rem; }
+  .md h1 { font-size: 1.4rem; }
+  .md h2 { font-size: 1.15rem; }
+}
+
+/* ── RWD: Desktop ────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .mobile-editor { display: none !important; }
+  .view-toggle-pill { display: none !important; }
+  .editor-split { display: flex; }
+  .open-btn .btn-label { display: inline; }
+}
+  </style>
 </head>
 <body>
 
-<!-- Loading -->
-<div id="state-loading" style="display:flex;">
-  <div class="spinner"></div>
-  <div class="loading-text">正在讀取加密內容...</div>
+<!-- ── Nav ───────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="javascript:goHome()">md<em>lock</em></a>
+
+  <!-- Mobile: single pill toggle (edit ↔ preview) -->
+  <div class="view-toggle-pill" id="mobileTogglePill">
+    <button id="pillEdit"    class="active" onclick="mobileTab('edit')">✏️ 編輯</button>
+    <button id="pillPreview"               onclick="mobileTab('preview')">👁 預覽</button>
+  </div>
+
+  <div class="nav-spacer"></div>
+
+  <!-- Theme toggle -->
+  <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="切換主題">🌙</button>
+
+  <!-- Switch doc button (only shown when a doc is loaded) -->
+  <button class="open-btn" id="switchBtn" onclick="toggleGistPanel()" style="display:none;">
+    <span id="switchBtnIcon">🔀 </span><span class="btn-label">切換文件</span>
+  </button>
+
+  <!-- Main right button: 加密文件 ↔ 返回文件 -->
+  <button class="open-btn" id="openBtn" onclick="navBtnClick()">
+    <span id="openBtnIcon">🔒 </span><span class="btn-label" id="openBtnLabel">加密文件</span>
+  </button>
+</nav>
+
+<!-- ── Gist input panel ───────────────────────────────────────── -->
+<div id="gistPanel">
+  <div class="gist-inner">
+    <input id="gistInput" type="text"
+      placeholder="貼上分享連結、gist.github.com 網址或純 Gist ID…"
+      autocomplete="off" autocorrect="off" spellcheck="false"
+      onkeydown="if(event.key==='Enter')goGist()" />
+    <button class="gist-go" id="gistGoBtn" onclick="goGist()">開啟 →</button>
+  </div>
+  <p class="gist-hint">貼上對方傳給你的分享連結，或直接輸入 Gist ID · 不需要登入</p>
+  <!-- Re-unlock row: visible when encryptedData is in memory -->
+  <div id="reUnlockRow" style="display:none; text-align:center; padding:0 1rem 1rem; font-size:.8rem; color:var(--text-dim);">
+    已有載入的加密文件　<a href="javascript:goRelock()" style="color:var(--accent);text-decoration:none;" id="relockLink">查看 →</a>
+    ／
+    <a href="javascript:clearEncrypted()" style="color:var(--muted);text-decoration:none;">清除</a>
+  </div>
 </div>
 
-<!-- Lock screen -->
-<div id="state-lock" style="display:none;">
-  <div class="card">
+<!-- ── Screen: Editor ─────────────────────────────────────────── -->
+<div class="screen active" id="screen-editor">
+
+  <!-- Desktop split -->
+  <div class="editor-split">
+    <div class="split-pane">
+      <div class="pane-label" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>Markdown</span>
+        <button class="ec-btn" id="copyMdBtn" onclick="copyEditorMd()">複製 Markdown</button>
+      </div>
+      <textarea id="mdEditor"
+        placeholder="# 標題&#10;&#10;在這裡輸入 Markdown…"
+        spellcheck="false"></textarea>
+    </div>
+    <div class="split-pane">
+      <div class="pane-label" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>預覽</span>
+        <button class="ec-btn" id="copyPreviewBtn" onclick="copyEditorPreview()">複製純文字</button>
+      </div>
+      <div class="preview-scroll">
+        <div class="preview-body md" id="editorPreview">
+          <span class="md-empty">輸入 Markdown 後將在這裡即時預覽</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile single pane -->
+  <div class="mobile-editor">
+    <!-- Mobile copy row: adapts to current tab -->
+    <div class="editor-copy-row">
+      <button class="ec-btn" id="mCopyBtn" onclick="copyEditorMobile()">複製 Markdown</button>
+    </div>
+    <div class="m-pane active" id="mobileEditPane">
+      <textarea id="mdEditorM"
+        placeholder="# 標題&#10;&#10;在這裡輸入 Markdown…"
+        spellcheck="false"></textarea>
+    </div>
+    <div class="m-pane" id="mobilePreviewPane">
+      <div class="m-preview-scroll">
+        <div class="m-preview-body md" id="editorPreviewM">
+          <span class="md-empty">切換到預覽後將顯示在這裡</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Screen: Loading ────────────────────────────────────────── -->
+<div class="screen" id="screen-loading">
+  <div class="spinner"></div>
+  <div class="loading-txt">正在讀取加密內容…</div>
+</div>
+
+<!-- ── Screen: Lock ───────────────────────────────────────────── -->
+<div class="screen" id="screen-lock">
+  <div class="lock-card">
     <div class="lock-icon">🔒</div>
-    <h1>加密文件</h1>
-    <p>此文件已加密保護，請輸入密碼以查看內容</p>
+    <h2>加密文件</h2>
+    <p>這份文件由分享者加密並上傳至其 GitHub Gist，請輸入他們提供的密碼查看。</p>
+    <div class="lock-meta" id="lockMeta"></div>
     <div class="inp-wrap">
-      <input type="password" id="pw" placeholder="輸入密碼..." autocomplete="current-password" />
-      <span class="eye" onclick="togglePw()">👁</span>
+      <input type="password" id="lockPw" placeholder="輸入密碼…" autocomplete="current-password" />
+      <span class="eye" onclick="toggleLockPw()">👁</span>
     </div>
     <button class="unlock-btn" id="unlockBtn" onclick="tryDecrypt()">解鎖查看</button>
-    <div class="err" id="err"></div>
+    <div class="form-err" id="lockErr"></div>
+    <a class="back-link" onclick="goHome()">← 返回</a>
   </div>
 </div>
 
-<!-- Error -->
-<div id="state-error" style="display:none;">
-  <div class="err-icon">⚠️</div>
-  <div class="err-title">無法載入文件</div>
-  <div class="err-msg" id="errMsg">找不到指定的加密內容，連結可能已失效。</div>
-</div>
+<!-- ── Screen: Decrypted ──────────────────────────────────────── -->
+<div class="screen" id="screen-decrypted">
 
-<!-- Content -->
-<div id="state-content" style="display:none;">
-  <div class="content-bar">
-    <span style="font-size:1.25rem;">🔓</span>
-    <span style="font-weight:600;font-size:1.1rem;">文件內容</span>
-    <span class="unlocked-badge">已解密</span>
-    <div style="margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap;">
-      <button class="tool-btn" id="toggleSrcBtn" onclick="toggleSource()">檢視原始碼</button>
-      <button class="tool-btn" id="copySrcBtn" onclick="copySource()">複製原始碼</button>
-      <button class="tool-btn" id="copyResultBtn" onclick="copyResult()">複製內容</button>
+  <div class="action-bar">
+    <div class="action-bar-left">
+      <button class="ab-back" onclick="goHome()">← 返回</button>
+      <span class="chip-unlocked">🔓 已解密</span>
+    </div>
+    <div class="action-bar-right">
+      <!-- Toggle: 預覽 ↔ Markdown (fixed width via ghost span) -->
+      <button class="ab-btn ab-btn-fixed" id="viewToggleBtn" onclick="toggleDecryptView()">
+        <span class="btn-ghost">查看 Markdown</span>
+        <span class="btn-real" id="viewToggleTxt">查看 Markdown</span>
+      </button>
+      <!-- Copy: label changes with view (fixed width via ghost span) -->
+      <button class="ab-btn ab-btn-fixed" id="copyBtn" onclick="copyDecrypted()">
+        <span class="btn-ghost">複製 Markdown</span>
+        <span class="btn-real" id="copyBtnTxt">複製純文字</span>
+      </button>
     </div>
   </div>
-  <pre id="rawSource" style="display:none;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:1.25rem;overflow-x:auto;font-family:'SF Mono','Fira Code',monospace;font-size:.85rem;line-height:1.7;color:#e2e8f0;white-space:pre-wrap;word-break:break-word;margin-bottom:1.5rem;"></pre>
-  <div class="md" id="mdContent"></div>
+
+  <!-- Rendered reading view (default) -->
+  <div class="reading-area" id="decryptRenderedArea">
+    <div class="reading-inner">
+      <div class="md" id="decryptedContent"></div>
+    </div>
+  </div>
+
+  <!-- Raw markdown view -->
+  <div id="rawSourceArea" style="display:none;">
+    <div class="raw-source-inner">
+      <pre id="rawSourcePre"></pre>
+    </div>
+  </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
 <script>
-let rawMd = '';
+// ── Theme ─────────────────────────────────────────────────────
+(function() {
+  const saved = localStorage.getItem('theme');
+  const sys   = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  setTheme(saved || sys, false);
+})();
 
-// ─── Toolbar actions ──────────────────────────────────────────────────────────
-function toggleSource() {
-  const src = document.getElementById('rawSource');
-  const btn = document.getElementById('toggleSrcBtn');
-  const visible = src.style.display !== 'none';
-  src.style.display = visible ? 'none' : 'block';
-  btn.classList.toggle('active', !visible);
-  btn.textContent = visible ? '檢視原始碼' : '隱藏原始碼';
+function setTheme(t, save = true) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+  if (save) localStorage.setItem('theme', t);
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  setTheme(cur === 'dark' ? 'light' : 'dark');
 }
 
-function copySource() {
-  navigator.clipboard.writeText(rawMd).then(() => flash('copySrcBtn', '已複製！', '複製原始碼'));
+// ── State ─────────────────────────────────────────────────────
+let encryptedData = null;
+let rawMd         = '';
+let decryptInMd   = false;
+let wasEncrypted  = false;  // false = plain markdown, true = AES decrypted   // false = rendered view, true = markdown source view
+
+const SCREENS = ['screen-editor','screen-loading','screen-lock','screen-decrypted'];
+function showScreen(id) {
+  SCREENS.forEach(s => {
+    const el = document.getElementById(s);
+    el.classList.toggle('active', s === id);
+  });
+  const onEditor = id === 'screen-editor';
+  document.getElementById('mobileTogglePill').style.display = onEditor ? '' : 'none';
+  updateNav();
 }
 
-function copyResult() {
-  const text = document.getElementById('mdContent').innerText;
-  navigator.clipboard.writeText(text).then(() => flash('copyResultBtn', '已複製！', '複製內容'));
+function updateNav() {
+  const hasDoc    = !!rawMd;
+  const onDecrypt = document.getElementById('screen-decrypted').classList.contains('active');
+  document.getElementById('switchBtn').style.display  = hasDoc ? '' : 'none';
+  document.getElementById('openBtnLabel').textContent = hasDoc ? '返回文件' : '加密文件';
+  document.getElementById('openBtnIcon').textContent  = hasDoc ? '📄 ' : '🔒 ';
+  // Highlight "返回文件" when already on the decrypted screen (disabled-like highlight)
+  const openBtn = document.getElementById('openBtn');
+  openBtn.classList.toggle('active', hasDoc && onDecrypt);
+  openBtn.style.pointerEvents = (hasDoc && onDecrypt) ? 'none' : '';
 }
 
-function flash(id, on, off) {
-  const btn = document.getElementById(id);
-  btn.textContent = on; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = off; btn.classList.remove('copied'); }, 2000);
+// What the main right button does depends on state
+function navBtnClick() {
+  if (rawMd) {
+    // Return to currently loaded doc
+    closeGistPanel();
+    showDecrypted();
+  } else {
+    toggleGistPanel();
+  }
+}
+function closeGistPanel() {
+  const panel = document.getElementById('gistPanel');
+  panel.classList.remove('open', 'has-more');
+  document.getElementById('reUnlockRow').style.display = 'none';
+  document.getElementById('switchBtn').classList.remove('active');
+  updateNav(); // re-applies correct active state for openBtn
 }
 
-// ─── State management ─────────────────────────────────────────────────────────
-function show(id) {
-  ['state-loading','state-lock','state-error','state-content'].forEach(s => {
-    document.getElementById(s).style.display = s === id ? (id === 'state-lock' || id === 'state-error' ? 'flex' : 'block') : 'none';
+// ── Init ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const gistId = new URLSearchParams(location.search).get('gist');
+  if (gistId) { loadGist(gistId); }
+  else { showScreen('screen-editor'); }
+
+  // Sync desktop ↔ mobile editors
+  document.getElementById('mdEditor').addEventListener('input', function() {
+    document.getElementById('mdEditorM').value = this.value;
+    renderEditorPreview(this.value);
+  });
+  document.getElementById('mdEditorM').addEventListener('input', function() {
+    document.getElementById('mdEditor').value = this.value;
+    renderEditorPreview(this.value);
+  });
+
+  document.getElementById('lockPw').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryDecrypt();
+  });
+
+  // Close gist panel when tapping outside nav/panel (especially on mobile)
+  document.addEventListener('click', e => {
+    const panel = document.getElementById('gistPanel');
+    if (!panel.classList.contains('open')) return;
+    const nav = document.querySelector('nav');
+    if (!nav.contains(e.target) && !panel.contains(e.target)) {
+      toggleGistPanel();
+    }
+  });
+});
+
+function renderEditorPreview(md) {
+  const html = md.trim()
+    ? renderMd(md)
+    : '<span class="md-empty">輸入 Markdown 後將在這裡即時預覽</span>';
+  document.getElementById('editorPreview').innerHTML  = html;
+  document.getElementById('editorPreviewM').innerHTML = html;
+}
+
+// ── Mobile tab toggle ─────────────────────────────────────────
+let mobileEditorTab = 'edit';   // track current tab for copy logic
+function mobileTab(tab) {
+  mobileEditorTab = tab;
+  const toEdit    = tab === 'edit';
+  document.getElementById('mobileEditPane').classList.toggle('active', toEdit);
+  document.getElementById('mobilePreviewPane').classList.toggle('active', !toEdit);
+  document.getElementById('pillEdit').classList.toggle('active', toEdit);
+  document.getElementById('pillPreview').classList.toggle('active', !toEdit);
+  document.getElementById('mCopyBtn').textContent = toEdit ? '複製 Markdown' : '複製純文字';
+  if (!toEdit) renderEditorPreview(document.getElementById('mdEditorM').value);
+}
+
+// ── Editor copy functions ─────────────────────────────────────
+function copyEditorMd() {
+  const text = document.getElementById('mdEditor').value;
+  _doCopy(text, document.getElementById('copyMdBtn'));
+}
+function copyEditorPreview() {
+  const text = document.getElementById('editorPreview').innerText || '';
+  _doCopy(text, document.getElementById('copyPreviewBtn'));
+}
+function copyEditorMobile() {
+  const btn = document.getElementById('mCopyBtn');
+  let text;
+  if (mobileEditorTab === 'edit') {
+    text = document.getElementById('mdEditorM').value;
+  } else {
+    text = document.getElementById('editorPreviewM').innerText || '';
+  }
+  _doCopy(text, btn);
+}
+function _doCopy(text, btn) {
+  const orig = btn.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '已複製！'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('done'); }, 2000);
   });
 }
 
-// ─── Crypto ───────────────────────────────────────────────────────────────────
+// ── Gist panel ────────────────────────────────────────────────
+function toggleGistPanel() {
+  const panel = document.getElementById('gistPanel');
+  const open  = !panel.classList.contains('open');
+  panel.classList.toggle('open', open);
+  // Highlight whichever button triggered this
+  document.getElementById('openBtn').classList.toggle('active', open && !rawMd);
+  document.getElementById('switchBtn').classList.toggle('active', open && !!rawMd);
+  const hasMore = open && !!encryptedData;
+  panel.classList.toggle('has-more', hasMore);
+  if (hasMore) {
+    const row  = document.getElementById('reUnlockRow');
+    const link = document.getElementById('relockLink');
+    row.style.display = 'block';
+    link.textContent = rawMd ? '直接查看 →' : '重新解鎖 →';
+  } else {
+    document.getElementById('reUnlockRow').style.display = 'none';
+  }
+  if (open) setTimeout(() => document.getElementById('gistInput').focus(), 150);
+}
+function goRelock() {
+  document.getElementById('gistPanel').classList.remove('open');
+  document.getElementById('openBtn').classList.remove('active');
+  // Already decrypted this session — skip password
+  if (rawMd) { showDecrypted(); return; }
+  // Otherwise show lock screen
+  document.getElementById('lockPw').value = '';
+  document.getElementById('lockErr').textContent = '';
+  document.getElementById('unlockBtn').disabled = false;
+  document.getElementById('unlockBtn').textContent = '解鎖查看';
+  showScreen('screen-lock');
+  document.getElementById('lockPw').focus();
+}
+function clearEncrypted() {
+  encryptedData = null; rawMd = '';
+  document.getElementById('reUnlockRow').style.display = 'none';
+  document.getElementById('gistInput').value = '';
+  history.replaceState({}, '', location.pathname);
+}
+
+function goGist() {
+  const raw = document.getElementById('gistInput').value.trim();
+  const id  = extractGistId(raw);
+  if (!id) {
+    const el = document.getElementById('gistInput');
+    el.style.borderColor = 'var(--red)';
+    setTimeout(() => el.style.borderColor = '', 1800);
+    return;
+  }
+  document.getElementById('gistPanel').classList.remove('open');
+  document.getElementById('openBtn').classList.remove('active');
+  loadGist(id);
+}
+
+function extractGistId(s) {
+  const p = s.match(/[?&]gist=([a-f0-9]+)/i); if (p) return p[1];
+  const g = s.match(/gist\.github\.com\/(?:[^\/]+\/)?([a-f0-9]{20,40})/i); if (g) return g[1];
+  if (/^[a-f0-9]{20,40}$/i.test(s)) return s;
+  return null;
+}
+
+// ── Load Gist ─────────────────────────────────────────────────
+function looksEncrypted(content) {
+  // Our cipher: pure base64 string, no spaces/newlines, length > 60
+  const s = content.trim();
+  return s.length > 60 && /^[A-Za-z0-9+/]+=*$/.test(s);
+}
+
+async function loadGist(id) {
+  showScreen('screen-loading');
+  try {
+    const res = await fetch(`https://api.github.com/gists/${id}`, {
+      headers: { Accept: 'application/vnd.github+json' }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data  = await res.json();
+    const files = Object.values(data.files);
+    if (!files.length) throw new Error('Gist 是空的');
+    const content = files[0].content;
+
+    if (looksEncrypted(content)) {
+      // Encrypted: show lock screen
+      encryptedData = content;
+      document.getElementById('lockMeta').textContent = `Gist ID: ${id}`;
+      document.getElementById('lockPw').value = '';
+      document.getElementById('lockErr').textContent = '';
+      document.getElementById('unlockBtn').disabled = false;
+      document.getElementById('unlockBtn').textContent = '解鎖查看';
+      showScreen('screen-lock');
+      document.getElementById('lockPw').focus();
+    } else {
+      // Plain markdown: render directly without password
+      encryptedData = null;
+      wasEncrypted  = false;
+      rawMd = content;
+      showDecrypted();
+    }
+  } catch(e) {
+    alert(`無法讀取 Gist：${e.message}`);
+    goHome();
+  }
+}
+
+// ── Crypto ────────────────────────────────────────────────────
 async function deriveKey(password, salt) {
   const raw = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: 120000, hash: 'SHA-256' },
-    raw, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+    { name:'PBKDF2', salt, iterations:120000, hash:'SHA-256' },
+    raw, { name:'AES-GCM', length:256 }, false, ['decrypt']
   );
 }
-async function decrypt(b64, password) {
+async function decrypt(b64, pw) {
   const buf = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-  const key = await deriveKey(password, buf.slice(0, 16));
-  const pt  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(16, 28) }, key, buf.slice(28));
+  const key = await deriveKey(pw, buf.slice(0,16));
+  const pt  = await crypto.subtle.decrypt({name:'AES-GCM', iv:buf.slice(16,28)}, key, buf.slice(28));
   return new TextDecoder().decode(pt);
 }
 
-// ─── Load encrypted data ──────────────────────────────────────────────────────
-let encryptedData = null;
-
-async function init() {
-  const params = new URLSearchParams(location.search);
-  const gistId = params.get('gist');
-
-  if (!gistId) {
-    showError('URL 中缺少 gist 參數，請確認連結是否完整。');
-    return;
-  }
-
-  try {
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: { 'Accept': 'application/vnd.github+json' }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    // 找第一個檔案的內容
-    const files = Object.values(data.files);
-    if (!files.length) throw new Error('Gist 是空的');
-    encryptedData = files[0].content;
-
-    show('state-lock');
-    document.getElementById('pw').focus();
-  } catch (e) {
-    showError(`無法讀取 Gist：${e.message}`);
-  }
-}
-
-function showError(msg) {
-  document.getElementById('errMsg').textContent = msg;
-  show('state-error');
-}
-
-// ─── Decrypt & render ─────────────────────────────────────────────────────────
-function togglePw() {
-  const el = document.getElementById('pw');
+function toggleLockPw() {
+  const el = document.getElementById('lockPw');
   el.type = el.type === 'password' ? 'text' : 'password';
 }
 
 async function tryDecrypt() {
-  const pw  = document.getElementById('pw').value;
-  const err = document.getElementById('err');
+  const pw  = document.getElementById('lockPw').value;
+  const err = document.getElementById('lockErr');
   const btn = document.getElementById('unlockBtn');
   err.textContent = '';
-
   if (!pw) { err.textContent = '請輸入密碼'; return; }
-  btn.disabled = true; btn.textContent = '解密中...';
-
+  btn.disabled = true; btn.textContent = '解密中…';
   try {
-    const md = await decrypt(encryptedData, pw);
-    rawMd = md;
-    show('state-content');
-    const rendered = typeof marked !== 'undefined' ? marked.parse(md) : md.replace(/\n/g, '<br>');
-    document.getElementById('mdContent').innerHTML = rendered;
-    document.getElementById('rawSource').textContent = md;
+    rawMd        = await decrypt(encryptedData, pw);
+    wasEncrypted = true;
+    showDecrypted();
   } catch {
     err.textContent = '密碼錯誤，請再試一次';
     btn.disabled = false; btn.textContent = '解鎖查看';
-    document.getElementById('pw').select();
+    document.getElementById('lockPw').select();
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryDecrypt(); });
-  init();
-});
+// ── Decrypted view ────────────────────────────────────────────
+function showDecrypted() {
+  decryptInMd = false;
+  document.getElementById('decryptedContent').innerHTML = renderMd(rawMd);
+  document.getElementById('rawSourcePre').textContent   = rawMd;
+  document.querySelector('.chip-unlocked').style.display = wasEncrypted ? '' : 'none';
+  document.getElementById('decryptRenderedArea').style.display = '';
+  document.getElementById('rawSourceArea').style.display = 'none';
+  document.getElementById('viewToggleTxt').textContent = '查看 Markdown';
+  document.getElementById('viewToggleBtn').classList.remove('active');
+  document.getElementById('copyBtnTxt').textContent = '複製純文字';
+  showScreen('screen-decrypted');
+  updateNav();
+}
+
+function toggleDecryptView() {
+  decryptInMd = !decryptInMd;
+  const btn       = document.getElementById('viewToggleBtn');
+  const copyBtn   = document.getElementById('copyBtn');
+  const rendered  = document.getElementById('decryptRenderedArea');
+  const rawArea   = document.getElementById('rawSourceArea');
+
+  if (decryptInMd) {
+    rendered.style.display = 'none';
+    rawArea.style.display  = '';
+    document.getElementById('viewToggleTxt').textContent = '查看預覽';
+    btn.classList.add('active');
+    document.getElementById('copyBtnTxt').textContent = '複製 Markdown';
+  } else {
+    rendered.style.display = '';
+    rawArea.style.display  = 'none';
+    document.getElementById('viewToggleTxt').textContent = '查看 Markdown';
+    btn.classList.remove('active');
+    document.getElementById('copyBtnTxt').textContent = '複製純文字';
+  }
+}
+
+function copyDecrypted() {
+  const text = decryptInMd ? rawMd : document.getElementById('decryptedContent').innerText;
+  const btn  = document.getElementById('copyBtn');
+  const span = document.getElementById('copyBtnTxt');
+  const orig = span.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    span.textContent = '已複製！'; btn.classList.add('done');
+    setTimeout(() => { span.textContent = orig; btn.classList.remove('done'); }, 2000);
+  });
+}
+
+// ── Navigation ────────────────────────────────────────────────
+function goHome() {
+  showScreen('screen-editor');
+  history.replaceState({}, '', location.pathname);
+  updateNav();
+}
+
+// ── Render ────────────────────────────────────────────────────
+function renderMd(md) {
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({ breaks: true, gfm: true });
+    return marked.parse(md);
+  }
+  return md.replace(/\n/g, '<br>');
+}
 </script>
 </body>
 </html>
