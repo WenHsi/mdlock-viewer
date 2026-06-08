@@ -4,233 +4,302 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>mdlock viewer — 即時 Markdown 預覽 × 加密文件閱讀</title>
-  <meta name="description" content="mdlock viewer：在線 Markdown 即時編輯預覽，支援 AES-256-GCM 加密文件解密閱讀，純前端、無後端。" />
+  <title>MdLock Viewer — 即時 Markdown 預覽 × 加密文件閱讀</title>
+  <meta name="description" content="MdLock Viewer：在線 Markdown 即時編輯預覽，支援 AES-256-GCM 加密文件解密閱讀，純前端、無後端。" />
   <meta name="author" content="wenhsi" />
   <link rel="canonical" href="https://wenhsi.github.io/mdlock-viewer/" />
-  <!-- Author / contact -->
-  <meta name="creator" content="wenhsi" />
   <!-- Apple touch icons -->
   <link rel="apple-touch-icon" sizes="180x180"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='110'>🔒</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%230f0f13'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='110'>🔒</text></svg>" />
   <link rel="apple-touch-icon" sizes="152x152"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 152'><rect width='152' height='152' rx='32' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='92'>🔒</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 152'><rect width='152' height='152' rx='32' fill='%230f0f13'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='92'>🔒</text></svg>" />
   <link rel="apple-touch-icon" sizes="120x120"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='26' fill='%231e1e1e'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='74'>🔒</text></svg>" />
-  <!-- Favicon / bookmark thumbnail -->
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='26' fill='%230f0f13'/><text x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-size='74'>🔒</text></svg>" />
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e1e1e'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f0f13'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
   <link rel="shortcut icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e1e1e'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f0f13'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='20'>🔒</text></svg>" />
   <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0f13" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
   <meta name="color-scheme" content="dark light" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://wenhsi.github.io/mdlock-viewer/" />
-  <meta property="og:title" content="mdlock viewer" />
+  <meta property="og:title" content="MdLock Viewer" />
   <meta property="og:description" content="即時 Markdown 預覽 × AES-256-GCM 加密文件閱讀，純前端無後端。" />
   <meta property="og:locale" content="zh_TW" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="mdlock viewer" />
+  <meta name="twitter:title" content="MdLock Viewer" />
   <meta name="twitter:description" content="即時 Markdown 預覽 × 加密文件閱讀" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="mdlock" />
+  <meta name="apple-mobile-web-app-title" content="MdLock" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <!-- GitHub + contact -->
-  <meta name="github" content="https://github.com/wenhsi" />
-  <meta name="contact" content="kevinwen2014@gmail.com" />
-  <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'><rect width='1200' height='630' fill='%231e1e1e'/><text x='50%25' y='46%25' dominant-baseline='middle' text-anchor='middle' font-size='120' fill='%23cccccc' font-family='system-ui'>🔒 mdlock viewer</text><text x='50%25' y='65%25' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23858585' font-family='system-ui'>即時 Markdown 預覽 × AES-256-GCM 加密文件閱讀</text></svg>" />
+  <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'><rect width='1200' height='630' fill='%230f0f13'/><text x='50%25' y='46%25' dominant-baseline='middle' text-anchor='middle' font-size='120' fill='%23e2e2ec' font-family='system-ui'>🔒 MdLock Viewer</text><text x='50%25' y='65%25' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%236a6a80' font-family='system-ui'>即時 Markdown 預覽 × AES-256-GCM 加密文件閱讀</text></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet" />
 
   <style>
-/* ── Variables ──────────────────────────────────────────────── */
+/* ── Design tokens ─────────────────────────────────────────────── */
 :root {
-  --bg:         #1e1e1e;
-  --bg-deep:    #141414;
-  --surface:    #252526;
-  --border:     #3c3c3c;
-  --border-2:   #505050;
-  --text:       #cccccc;
-  --text-dim:   #858585;
-  --muted:      #555555;
-  --accent:     #7b68f0;
-  --accent-h:   #6455d8;
-  --green:      #4ec994;
-  --red:        #f47069;
-  --ed-bg:      #1e1e1e;
-  --ed-fg:      #d4d4d4;
-  --nav-h:      52px;
-  --radius:     8px;
-  --reading-w:  680px;
+  --bg:           #0f0f13;
+  --bg-deep:      #090910;
+  --surface:      #17171e;
+  --surface-2:    #1e1e28;
+  --border:       #28283a;
+  --border-2:     #38384e;
+  --text:         #e2e2ec;
+  --text-dim:     #6a6a80;
+  --muted:        #3e3e50;
+  --accent:       #7c6df0;
+  --accent-h:     #6455d8;
+  --accent-bg:    rgba(124,109,240,.12);
+  --accent-border:rgba(124,109,240,.3);
+  --green:        #3dd68c;
+  --green-bg:     rgba(61,214,140,.1);
+  --green-border: rgba(61,214,140,.25);
+  --red:          #f76560;
+  --ed-bg:        #0f0f13;
+  --ed-fg:        #d4d4e8;
+  --nav-h:        56px;
+  --radius:       10px;
+  --radius-lg:    16px;
+  --reading-w:    720px;
+  --shadow-sm:    0 2px 8px rgba(0,0,0,.35);
+  --shadow:       0 8px 32px rgba(0,0,0,.5);
+  --shadow-lg:    0 20px 60px rgba(0,0,0,.6);
 }
 [data-theme="light"] {
-  --bg:         #ffffff;
-  --bg-deep:    #f5f5f5;
-  --surface:    #f0f0f0;
-  --border:     #dcdcdc;
-  --border-2:   #c0c0c0;
-  --text:       #1f1f1f;
-  --text-dim:   #5a5a5a;
-  --muted:      #a0a0a0;
-  --accent:     #5b4ff4;
-  --accent-h:   #4840cc;
-  --green:      #2e9e68;
-  --red:        #cc3333;
-  --ed-bg:      #ffffff;
-  --ed-fg:      #1f1f1f;
+  --bg:           #fafafa;
+  --bg-deep:      #f0f0f5;
+  --surface:      #f3f3f8;
+  --surface-2:    #eaeaf2;
+  --border:       #dcdce8;
+  --border-2:     #c4c4d4;
+  --text:         #0f0f18;
+  --text-dim:     #58586e;
+  --muted:        #8a8a9a;
+  --accent:       #5b4cf0;
+  --accent-h:     #4a3dda;
+  --accent-bg:    rgba(91,76,240,.08);
+  --accent-border:rgba(91,76,240,.25);
+  --green:        #1a9a60;
+  --green-bg:     rgba(26,154,96,.08);
+  --green-border: rgba(26,154,96,.2);
+  --red:          #c03030;
+  --ed-bg:        #ffffff;
+  --ed-fg:        #0f0f18;
+  --shadow-sm:    0 1px 4px rgba(0,0,0,.06);
+  --shadow:       0 4px 20px rgba(0,0,0,.08);
+  --shadow-lg:    0 12px 40px rgba(0,0,0,.12);
 }
 
-/* ── Reset ──────────────────────────────────────────────────── */
+/* ── Reset ─────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: 100%; font-size: 15px; }
+html { height: 100%; font-size: 16px; }
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
   background: var(--bg); color: var(--text);
   height: 100%; min-height: 100dvh;
   -webkit-text-size-adjust: 100%;
+  font-feature-settings: 'cv02','cv03','cv04','cv11';
   transition: background .2s, color .2s;
 }
 input, textarea, button { font-family: inherit; font-size: inherit; }
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
 
-/* ── Nav ────────────────────────────────────────────────────── */
+/* ── Nav ────────────────────────────────────────────────────────── */
 nav {
   position: sticky; top: 0; z-index: 100;
   height: var(--nav-h);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
-  padding: 0 1rem;
-  padding-left:  max(1rem, env(safe-area-inset-left));
-  padding-right: max(1rem, env(safe-area-inset-right));
+  padding: 0 1.25rem;
+  padding-left:  max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
   gap: .5rem;
 }
 .nav-logo {
-  font-size: .9375rem; font-weight: 700; letter-spacing: -.01em;
-  color: var(--text); text-decoration: none; white-space: nowrap; margin-right: .25rem;
+  display: flex; flex-direction: column; gap: .05rem;
+  text-decoration: none; margin-right: .25rem;
 }
-.nav-logo em { font-style: normal; color: var(--accent); }
+.nav-logo .logo-main {
+  font-size: .9375rem; font-weight: 700; letter-spacing: -.025em;
+  color: var(--text); line-height: 1.2;
+}
+.nav-logo .logo-main em { font-style: normal; color: var(--accent); }
+.nav-logo .logo-by {
+  font-size: .58rem; color: var(--muted); letter-spacing: .04em;
+  font-family: 'DM Mono', monospace; line-height: 1; margin-top: .18rem;
+  text-decoration: none;
+}
+.nav-logo .logo-by:hover { color: var(--text-dim); }
 .nav-spacer { flex: 1; }
+.nav-left { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+.app-switch {
+  display: flex; align-items: center; gap: .4rem;
+  font-family: 'DM Mono', monospace; font-size: .72rem;
+}
+.sw-sep { color: var(--border-2); user-select: none; }
+.sw-item {
+  position: relative; padding-bottom: 2px;
+  color: var(--muted); text-decoration: none;
+  transition: color .2s; white-space: nowrap; letter-spacing: .02em;
+}
+.sw-item::after {
+  content: ''; position: absolute;
+  bottom: -1px; left: 0; width: 100%; height: 2px;
+  background: var(--accent); border-radius: 1px;
+  transform: scaleX(0);
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.sw-item.active { color: var(--text); font-weight: 500; cursor: default; }
+.sw-item.active::after { transform: scaleX(1); transform-origin: left; }
+.sw-item:not(.active):hover { color: var(--text-dim); text-decoration: none; }
+/* encryptor page: active=left, hover exits right */
+.app-encryptor:has(a.sw-item:hover) .sw-item.active::after {
+  transform: scaleX(0); transform-origin: right;
+}
+.app-encryptor a.sw-item:hover::after {
+  transform: scaleX(1); transform-origin: left;
+}
+/* viewer page: active=right, hover exits left */
+.app-viewer:has(a.sw-item:hover) .sw-item.active::after {
+  transform: scaleX(0); transform-origin: left;
+}
+.app-viewer a.sw-item:hover::after {
+  transform: scaleX(1); transform-origin: right;
+}
 
-/* Mobile view-toggle pill */
+/* Mobile view-toggle pill (lives inside .mobile-editor .editor-copy-row) */
 .view-toggle-pill {
-  display: none;           /* shown only on mobile */
+  display: flex;
   align-items: center;
-  background: var(--bg); border: 1px solid var(--border);
+  background: var(--surface); border: 1px solid var(--border);
   border-radius: 999px; overflow: hidden; flex-shrink: 0;
 }
 .view-toggle-pill button {
-  padding: .3rem .75rem; border: none; background: none;
-  color: var(--text-dim); font-size: .78rem; font-weight: 600; cursor: pointer;
-  transition: background .15s, color .15s; white-space: nowrap;
+  padding: .3rem .8rem; border: none; background: none;
+  color: var(--text-dim); font-size: .75rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap; letter-spacing: -.01em;
 }
-.view-toggle-pill button.active {
-  background: var(--accent); color: #fff;
-}
+.view-toggle-pill button.active { background: var(--accent); color: #fff; }
 
-/* Icon button (theme toggle) */
+/* Icon button */
 .icon-btn {
   width: 34px; height: 34px; border-radius: var(--radius);
   border: 1px solid var(--border); background: none;
-  color: var(--text-dim); font-size: 1rem; cursor: pointer;
+  color: var(--text-dim); font-size: .9375rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: background .15s, color .15s, border-color .15s; flex-shrink: 0;
 }
-.icon-btn:hover { background: var(--border); color: var(--text); }
+.icon-btn:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-2); }
 
-/* Decrypt button */
+/* Nav open/action button */
 .open-btn {
-  display: flex; align-items: center; gap: .35rem;
-  padding: .38rem .85rem; border-radius: var(--radius);
+  display: flex; align-items: center; gap: .3rem;
+  padding: .38rem .875rem; border-radius: var(--radius);
   border: 1px solid var(--border); background: none;
-  color: var(--text-dim); font-size: .8125rem; font-weight: 600;
+  color: var(--text-dim); font-size: .8125rem; font-weight: 500;
   cursor: pointer; white-space: nowrap;
   transition: background .15s, color .15s, border-color .15s;
+  letter-spacing: -.01em;
 }
-.open-btn:hover { background: var(--border); color: var(--text); }
+.open-btn:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-2); }
 .open-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 .open-btn .btn-label { display: inline; }
 
-/* ── Gist panel ─────────────────────────────────────────────── */
+/* ── Gist panel ─────────────────────────────────────────────────── */
 #gistPanel {
-  background: var(--surface); border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   overflow: hidden; max-height: 0;
-  transition: max-height .22s ease, padding .22s ease;
+  transition: max-height .22s cubic-bezier(.4,0,.2,1), padding .22s ease;
 }
-#gistPanel.open          { max-height: 100px; }
-#gistPanel.open.has-more { max-height: 145px; }
+#gistPanel.open          { max-height: 110px; }
+#gistPanel.open.has-more { max-height: 158px; }
 .gist-inner {
-  max-width: 640px; margin: 0 auto; padding: .75rem 1rem .5rem;
+  max-width: 640px; margin: 0 auto; padding: .875rem 1.25rem .625rem;
   display: flex; gap: .5rem; align-items: center;
-  padding-left:  max(1rem, env(safe-area-inset-left));
-  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-left:  max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
 }
 #gistInput {
   flex: 1; min-width: 0;
-  padding: .6rem .875rem;
+  padding: .6rem .9rem;
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
   color: var(--text); font-size: .875rem; outline: none;
-  transition: border-color .2s;
+  transition: border-color .2s, box-shadow .2s;
 }
-#gistInput:focus { border-color: var(--accent); }
+#gistInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
 #gistInput::placeholder { color: var(--muted); }
 .gist-go {
-  padding: .6rem 1.1rem; background: var(--accent); color: #fff;
+  padding: .6rem 1.125rem; background: var(--accent); color: #fff;
   border: none; border-radius: var(--radius); font-size: .875rem; font-weight: 600;
   cursor: pointer; white-space: nowrap; transition: background .15s; flex-shrink: 0;
+  letter-spacing: -.01em;
 }
 .gist-go:hover { background: var(--accent-h); }
-.gist-go:disabled { background: var(--border); color: var(--muted); cursor: default; }
-.gist-hint { font-size: .72rem; color: var(--muted); text-align: center; margin: .2rem 0 .55rem; }
+.gist-go:disabled { background: var(--border); color: var(--text-dim); cursor: default; }
+.gist-hint {
+  font-size: .72rem; color: var(--muted); text-align: center;
+  margin: .15rem 0 .6rem; letter-spacing: -.005em;
+}
+.gist-hint a { color: var(--text-dim); }
 
-/* Fixed-width toggle buttons — ghost span reserves space of longest label */
+/* Unlock row */
+#reUnlockRow {
+  text-align: center; padding: 0 1.25rem 1rem;
+  font-size: .8rem; color: var(--text-dim);
+  border-top: 1px solid var(--border); padding-top: .75rem; margin-top: .1rem;
+}
+#reUnlockRow a { color: var(--accent); text-decoration: none; font-weight: 500; }
+#reUnlockRow a:hover { text-decoration: underline; }
+
+/* Fixed-width toggle buttons */
 .ab-btn-fixed {
-  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
 }
 .ab-btn-fixed .btn-ghost {
   visibility: hidden; pointer-events: none; white-space: nowrap;
 }
-.ab-btn-fixed .btn-real {
-  position: absolute; white-space: nowrap;
-}
+.ab-btn-fixed .btn-real { position: absolute; white-space: nowrap; }
 
-/* ── Screens ─────────────────────────────────────────────────── */
+/* ── Screens ────────────────────────────────────────────────────── */
 .screen { display: none; }
 .screen.active { display: flex; }
 
-/* ── Editor screen ───────────────────────────────────────────── */
-#screen-editor {
-  flex-direction: column;
-  height: calc(100dvh - var(--nav-h));
-}
-
-/* Desktop split */
-.editor-split {
-  flex: 1; display: flex; overflow: hidden;
-  min-height: 0;
-}
+/* ── Editor screen ───────────────────────────────────────────────── */
+#screen-editor { flex-direction: column; height: calc(100dvh - var(--nav-h)); overflow: hidden; }
+.editor-split { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 .split-pane { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 .split-pane + .split-pane { border-left: 1px solid var(--border); }
 .pane-label {
-  padding: .45rem 1.125rem;
-  font-size: .7rem; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .06em;
+  padding: .5rem 1.125rem;
+  font-size: .7rem; font-weight: 600; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: .07em;
   border-bottom: 1px solid var(--border);
   background: var(--surface); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
 }
 #mdEditor {
   flex: 1; resize: none; outline: none;
   background: var(--ed-bg); color: var(--ed-fg);
-  border: none; padding: 1.25rem 1.375rem;
+  border: none; padding: 1.5rem 1.5rem;
   font-family: 'Fira Code', 'SF Mono', 'Consolas', 'Menlo', monospace;
-  font-size: .875rem; line-height: 1.75; tab-size: 2;
+  font-size: .875rem; line-height: 1.8; tab-size: 2;
   transition: background .2s, color .2s;
 }
 .preview-scroll { flex: 1; overflow-y: auto; }
-.preview-body { padding: 1.5rem 1.75rem; }
+.preview-body { padding: 2rem 2rem; }
 
 /* Mobile single pane */
 .mobile-editor { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
@@ -239,72 +308,109 @@ nav {
 #mdEditorM {
   flex: 1; resize: none; outline: none;
   background: var(--ed-bg); color: var(--ed-fg);
-  border: none; padding: 1rem 1.125rem;
+  border: none; padding: 1.125rem 1.125rem;
   font-family: 'Fira Code', 'SF Mono', 'Consolas', monospace;
-  font-size: .875rem; line-height: 1.75; tab-size: 2;
+  font-size: .875rem; line-height: 1.8; tab-size: 2;
   transition: background .2s, color .2s;
 }
 .m-preview-scroll { flex: 1; overflow-y: auto; }
-.m-preview-body { padding: 1.25rem 1.125rem; }
+.m-preview-body { padding: 1.5rem 1.125rem; }
 
-/* ── Loading ─────────────────────────────────────────────────── */
+/* ── Loading screen ──────────────────────────────────────────────── */
 #screen-loading {
   min-height: calc(100dvh - var(--nav-h));
-  align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+  flex-direction: column;
 }
-.spinner {
-  width: 32px; height: 32px;
-  border: 2.5px solid var(--border); border-top-color: var(--accent);
-  border-radius: 50%; animation: spin .7s linear infinite;
+.loading-center {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: .875rem;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-txt { color: var(--text-dim); font-size: .875rem; }
+/* Three-dot loading animation */
+.loading-dots {
+  display: flex; gap: .4rem; align-items: center;
+}
+.loading-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); opacity: .3;
+  animation: dotpulse 1.2s ease-in-out infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: .2s; }
+.loading-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes dotpulse {
+  0%, 100% { opacity: .25; transform: scale(.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.loading-txt {
+  color: var(--text-dim); font-size: .8125rem; letter-spacing: -.01em;
+}
 
-/* ── Lock screen ─────────────────────────────────────────────── */
+/* ── Lock screen ─────────────────────────────────────────────────── */
 #screen-lock {
   min-height: calc(100dvh - var(--nav-h));
-  align-items: center; justify-content: center; padding: 1.5rem;
+  flex-direction: column;
+}
+.lock-center {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 2rem 1.5rem; gap: 1rem;
 }
 .lock-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 2.25rem 2rem;
+  border-radius: var(--radius-lg); padding: 2.5rem 2.25rem;
   max-width: 380px; width: 100%; text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  box-shadow: var(--shadow-lg);
 }
-[data-theme="light"] .lock-card { box-shadow: 0 8px 40px rgba(0,0,0,.1); }
-.lock-icon { font-size: 2.75rem; margin-bottom: 1rem; animation: pulse 2.5s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-.lock-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
-.lock-card p  { color: var(--text-dim); font-size: .875rem; margin-bottom: 1.625rem; line-height: 1.6; }
+.lock-icon {
+  font-size: 2.5rem; margin-bottom: 1.25rem;
+  animation: lockpulse 3s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes lockpulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+.lock-card h2 {
+  font-size: 1.1875rem; font-weight: 700; margin-bottom: .375rem;
+  color: var(--text); letter-spacing: -.025em;
+}
+.lock-card p  {
+  color: var(--text-dim); font-size: .875rem;
+  margin-bottom: 1.5rem; line-height: 1.65;
+}
 .lock-meta {
-  font-size: .72rem; color: var(--muted); font-family: monospace;
+  font-size: .72rem; color: var(--muted); font-family: 'Fira Code', monospace;
   margin-bottom: 1.25rem; word-break: break-all; text-align: left;
   background: var(--bg); border: 1px solid var(--border);
-  border-radius: 6px; padding: .45rem .7rem;
+  border-radius: 8px; padding: .5rem .75rem;
 }
 .inp-wrap { position: relative; margin-bottom: .75rem; }
 .inp-wrap input {
-  width: 100%; padding: .72rem 2.5rem .72rem .9rem;
+  width: 100%; padding: .75rem 2.5rem .75rem .95rem;
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
   color: var(--text); font-size: .9375rem; outline: none;
-  transition: border-color .2s, background .2s;
+  transition: border-color .2s, box-shadow .2s;
 }
-.inp-wrap input:focus { border-color: var(--accent); }
+.inp-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
 .inp-wrap input::placeholder { color: var(--muted); }
 .eye {
-  position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
-  cursor: pointer; color: var(--muted); user-select: none; font-size: .9rem;
+  position: absolute; right: .8rem; top: 50%; transform: translateY(-50%);
+  cursor: pointer; color: var(--muted); user-select: none; font-size: .875rem;
   transition: color .15s;
 }
 .eye:hover { color: var(--text-dim); }
 .unlock-btn {
   width: 100%; padding: .78rem; border: none; border-radius: var(--radius);
   background: var(--accent); color: #fff; font-size: .9375rem; font-weight: 600;
-  cursor: pointer; transition: background .15s; letter-spacing: .01em;
+  cursor: pointer; transition: background .15s; letter-spacing: -.015em;
 }
 .unlock-btn:hover { background: var(--accent-h); }
-.unlock-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
-.form-err { color: var(--red); font-size: .8rem; margin-top: .6rem; min-height: 1em; text-align: left; }
+.unlock-btn:disabled { opacity: .45; cursor: default; }
+.form-err {
+  color: var(--red); font-size: .8rem; margin-top: .6rem;
+  min-height: 1.2em; text-align: left;
+}
 .back-link {
   display: inline-block; margin-top: 1.125rem;
   color: var(--muted); font-size: .8rem; cursor: pointer;
@@ -312,135 +418,198 @@ nav {
 }
 .back-link:hover { color: var(--text-dim); }
 
-/* ── Decrypted screen ────────────────────────────────────────── */
+/* ── Decrypted screen ────────────────────────────────────────────── */
 #screen-decrypted { flex-direction: column; min-height: calc(100dvh - var(--nav-h)); }
 
 .action-bar {
   background: var(--surface); border-bottom: 1px solid var(--border);
-  padding: .55rem 1rem;
-  padding-left:  max(1rem, env(safe-area-inset-left));
-  padding-right: max(1rem, env(safe-area-inset-right));
+  padding: .55rem 1.25rem;
+  padding-left:  max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
   display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
 }
 .action-bar-left  { display: flex; align-items: center; gap: .5rem; }
 .action-bar-right { margin-left: auto; display: flex; gap: .4rem; }
+
 .ab-back {
-  padding: .3rem .65rem; border-radius: var(--radius); border: 1px solid var(--border);
-  background: none; color: var(--text-dim); font-size: .8rem; cursor: pointer;
-  transition: background .15s, color .15s;
+  padding: .3rem .7rem; border-radius: var(--radius); border: 1px solid var(--border);
+  background: none; color: var(--text-dim); font-size: .8rem; font-weight: 500;
+  cursor: pointer; transition: background .15s, color .15s; letter-spacing: -.01em;
 }
-.ab-back:hover { background: var(--border); color: var(--text); }
+.ab-back:hover { background: var(--surface-2); color: var(--text); }
+
 .chip-unlocked {
-  font-size: .72rem; color: var(--green);
-  background: rgba(78,201,148,.1); padding: .2rem .6rem;
-  border-radius: 999px; border: 1px solid rgba(78,201,148,.2); white-space: nowrap;
+  font-size: .72rem; font-weight: 600; color: var(--green);
+  background: var(--green-bg); padding: .2rem .65rem;
+  border-radius: 999px; border: 1px solid var(--green-border);
+  white-space: nowrap; letter-spacing: -.01em;
 }
 .ab-btn {
   padding: .3rem .75rem; border-radius: var(--radius); border: 1px solid var(--border);
-  background: none; color: var(--text-dim); font-size: .8rem; cursor: pointer;
-  transition: background .15s, color .15s; white-space: nowrap;
+  background: none; color: var(--text-dim); font-size: .8rem; font-weight: 500;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+  letter-spacing: -.01em;
 }
-.ab-btn:hover { background: var(--border); color: var(--text); }
+.ab-btn:hover { background: var(--surface-2); color: var(--text); }
 .ab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 .ab-btn.done   { background: var(--green); border-color: var(--green); color: #fff; }
 
-/* Decrypted reading area */
-.reading-area { flex: 1; overflow-y: auto; }
-.reading-inner { max-width: var(--reading-w); margin: 0 auto; padding: 2.5rem 1.5rem; }
+/* Reading area */
+.reading-area {
+  flex: 1; overflow-y: auto;
+  padding: 2rem 1.25rem;
+  display: flex; flex-direction: column;
+}
+.reading-inner {
+  flex: 1; display: flex; flex-direction: column;
+  max-width: var(--reading-w); width: 100%; margin: 0 auto;
+  padding: 2.75rem 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+#screen-decrypted > .site-footer { flex-shrink: 0; }
 
-/* Raw source area */
+/* Raw source */
 #rawSourceArea {
-  flex: 1; overflow-y: auto; background: var(--bg);
+  flex: 1; overflow-y: auto;
+  padding: 2rem 1.25rem;
+  display: flex; flex-direction: column;
 }
 .raw-source-inner {
-  max-width: var(--reading-w); margin: 0 auto; padding: 1.5rem;
+  flex: 1; display: flex; flex-direction: column;
+  max-width: var(--reading-w); width: 100%; margin: 0 auto;
+  padding: 2rem 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 #rawSourcePre {
   font-family: 'Fira Code', 'SF Mono', 'Consolas', monospace;
-  font-size: .875rem; line-height: 1.75; color: var(--text);
+  font-size: .875rem; line-height: 1.8; color: var(--text);
   white-space: pre-wrap; word-break: break-word;
 }
 
-/* ── Markdown styles ─────────────────────────────────────────── */
-.md { line-height: 1.8; color: var(--text); font-size: 1rem; }
-.md > *:first-child { margin-top: 0 !important; }
-.md h1 { font-size: 1.75rem; font-weight: 700; margin: 2rem 0 .875rem; line-height: 1.3; border-bottom: 1px solid var(--border); padding-bottom: .5rem; }
-.md h2 { font-size: 1.375rem; font-weight: 700; margin: 1.75rem 0 .75rem; line-height: 1.35; }
-.md h3 { font-size: 1.125rem; font-weight: 600; margin: 1.5rem 0 .6rem; }
-.md h4 { font-size: 1rem;     font-weight: 600; margin: 1.25rem 0 .5rem; }
-.md p  { margin-bottom: 1rem; }
-.md a  { color: var(--accent); text-decoration: none; }
-.md a:hover { text-decoration: underline; }
-.md ul, .md ol { padding-left: 1.625rem; margin-bottom: 1rem; }
-.md li { margin-bottom: .3rem; }
-.md li > p { margin-bottom: .25rem; }
-.md blockquote {
-  border-left: 3px solid var(--accent); padding: .5rem 1rem;
-  background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0;
-  margin-bottom: 1rem; color: var(--text-dim);
-}
-.md code {
-  background: var(--surface); padding: .15em .4em;
-  border-radius: 4px; font-size: .84em;
-  font-family: 'Fira Code','SF Mono','Consolas',monospace; color: var(--text);
-  border: 1px solid var(--border);
-}
-.md pre {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.125rem 1.25rem;
-  overflow-x: auto; margin-bottom: 1rem;
-}
-.md pre code { background: none; padding: 0; font-size: .875rem; border: none; color: var(--ed-fg); }
-.md table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: .9375rem; }
-.md th, .md td { border: 1px solid var(--border); padding: .55rem 1rem; text-align: left; }
-.md th { background: var(--surface); font-weight: 600; }
-.md tr:nth-child(even) { background: rgba(128,128,128,.04); }
-.md hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-.md img { max-width: 100%; border-radius: var(--radius); display: block; margin: 1.25rem 0; }
-.md strong { font-weight: 700; }
-.md em { font-style: italic; }
-
-.md-empty { color: var(--muted); font-size: .875rem; font-style: italic; }
-
-/* ── Editor copy row ─────────────────────────────────────────── */
+/* ── Editor copy row ─────────────────────────────────────────────── */
 .editor-copy-row {
-  display: flex; justify-content: flex-end; gap: .4rem;
-  padding: .35rem .625rem;
+  display: flex; align-items: center; justify-content: space-between; gap: .4rem;
+  padding: .375rem .7rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface); flex-shrink: 0;
 }
 .ec-btn {
-  padding: .2rem .65rem; border-radius: 5px;
+  padding: .2rem .65rem; border-radius: 6px;
   border: 1px solid var(--border); background: none;
-  color: var(--text-dim); font-size: .75rem; cursor: pointer;
-  transition: background .15s, color .15s; white-space: nowrap;
+  color: var(--text-dim); font-size: .74rem; font-weight: 500; cursor: pointer;
+  transition: background .15s, color .15s; white-space: nowrap; letter-spacing: -.01em;
 }
-.ec-btn:hover  { background: var(--border); color: var(--text); }
+.ec-btn:hover  { background: var(--surface-2); color: var(--text); }
 .ec-btn.done   { background: var(--green); border-color: var(--green); color: #fff; }
 
-/* ── RWD: Mobile first ───────────────────────────────────────── */
+/* ── Markdown prose styles ───────────────────────────────────────── */
+.md {
+  line-height: 1.8;
+  color: var(--text);
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+.md > *:first-child { margin-top: 0 !important; }
+.md h1 {
+  font-size: 1.75rem; font-weight: 700; margin: 2.25rem 0 1rem;
+  line-height: 1.25; letter-spacing: -.03em;
+  border-bottom: 1px solid var(--border); padding-bottom: .625rem;
+  color: var(--text);
+}
+.md h2 {
+  font-size: 1.375rem; font-weight: 700; margin: 2rem 0 .875rem;
+  line-height: 1.3; letter-spacing: -.025em;
+}
+.md h3 {
+  font-size: 1.125rem; font-weight: 600; margin: 1.75rem 0 .625rem;
+  letter-spacing: -.02em;
+}
+.md h4 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 .5rem; }
+.md p  { margin-bottom: 1.1rem; }
+.md a  { color: var(--accent); text-decoration: none; font-weight: 500; }
+.md a:hover { text-decoration: underline; }
+.md ul, .md ol { padding-left: 1.625rem; margin-bottom: 1rem; }
+.md li { margin-bottom: .35rem; }
+.md li > p { margin-bottom: .3rem; }
+.md blockquote {
+  border-left: 3px solid var(--accent); padding: .625rem 1.125rem;
+  background: var(--accent-bg); border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 1.1rem; color: var(--text-dim);
+  border: 1px solid var(--accent-border); border-left-width: 3px;
+}
+.md code {
+  background: var(--surface-2); padding: .18em .42em;
+  border-radius: 5px; font-size: .84em;
+  font-family: 'Fira Code','SF Mono','Consolas',monospace; color: var(--text);
+  border: 1px solid var(--border-2);
+}
+.md pre {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem 1.375rem;
+  overflow-x: auto; margin-bottom: 1.1rem;
+}
+.md pre code {
+  background: none; padding: 0; font-size: .875rem; border: none;
+  color: var(--ed-fg);
+}
+.md table {
+  width: 100%; border-collapse: collapse; margin-bottom: 1.1rem;
+  font-size: .9375rem; display: block; overflow-x: auto;
+}
+.md th, .md td { border: 1px solid var(--border); padding: .6rem 1.1rem; text-align: left; }
+.md th { background: var(--surface-2); font-weight: 600; font-size: .875rem; }
+.md tr:nth-child(even) { background: rgba(128,128,128,.03); }
+.md hr { border: none; border-top: 1px solid var(--border); margin: 2.25rem 0; }
+.md img { max-width: 100%; border-radius: var(--radius); display: block; margin: 1.5rem 0; }
+.md strong { font-weight: 700; }
+.md em { font-style: italic; }
+.md-empty { color: var(--muted); font-size: .875rem; font-style: italic; }
+
+/* ── Copyright ───────────────────────────────────────────────────── */
+.site-footer {
+  text-align: center;
+  padding: 1rem 20px max(1.25rem, env(safe-area-inset-bottom));
+  font-family: 'DM Mono', monospace; font-size: .6rem;
+  color: var(--muted); letter-spacing: .12em;
+  border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.credit-link {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px solid transparent; padding-bottom: 1px;
+  transition: color .15s, border-color .15s;
+}
+.credit-link:hover { color: var(--text-dim); border-bottom-color: currentColor; }
+
+/* ── RWD: Mobile ─────────────────────────────────────────────────── */
 @media (max-width: 767px) {
+  html { font-size: 15px; overflow-x: hidden; }
+  body { overflow-x: hidden; }
   .editor-split { display: none !important; }
   .mobile-editor { display: flex; }
-  .view-toggle-pill { display: flex; }
   .open-btn .btn-label { display: none; }
 
   .action-bar { flex-wrap: nowrap; }
   .action-bar-right { margin-left: auto; }
-  .chip-unlocked { display: none; }  /* nav 的 📄 按鈕已表達，手機版省略 */
+  .chip-unlocked { display: none; }
 
-  .reading-inner { padding: 1.5rem 1rem; }
-  .raw-source-inner { padding: 1rem; }
-
-  .lock-card { padding: 1.875rem 1.375rem; }
+  .reading-area,
+  #rawSourceArea { padding: 1rem .75rem; }
+  .reading-inner { padding: 1.75rem 1.25rem; }
+  .raw-source-inner { padding: 1.25rem 1.25rem; }
+  .lock-card { padding: 2rem 1.5rem; }
   .md h1 { font-size: 1.4rem; }
-  .md h2 { font-size: 1.15rem; }
+  .md h2 { font-size: 1.2rem; }
+  .md h3 { font-size: 1rem; }
 }
 
-/* ── RWD: Desktop ────────────────────────────────────────────── */
+/* ── RWD: Desktop ────────────────────────────────────────────────── */
 @media (min-width: 768px) {
   .mobile-editor { display: none !important; }
-  .view-toggle-pill { display: none !important; }
   .editor-split { display: flex; }
   .open-btn .btn-label { display: inline; }
 }
@@ -448,33 +617,27 @@ nav {
 </head>
 <body>
 
-<!-- ── Nav ───────────────────────────────────────────────────── -->
+<!-- ── Nav ───────────────────────────────────────────────────────── -->
 <nav>
-  <a class="nav-logo" href="javascript:goHome()">md<em>lock</em></a>
-
-  <!-- Mobile: single pill toggle (edit ↔ preview) -->
-  <div class="view-toggle-pill" id="mobileTogglePill">
-    <button id="pillEdit"    class="active" onclick="mobileTab('edit')">✏️ 編輯</button>
-    <button id="pillPreview"               onclick="mobileTab('preview')">👁 預覽</button>
+  <div class="nav-left">
+    <div class="nav-logo"><a href="https://wenhsi.github.io/mdlock-viewer/" style="text-decoration:none;color:inherit"><span class="logo-main">Md<em>Lock</em></span></a><a href="https://github.com/wenhsi" target="_blank" rel="noopener noreferrer" class="logo-by">by wenhsi</a></div>
+    <div class="app-switch app-viewer"><a class="sw-item" href="https://wenhsi.github.io/mdlock-encryptor/" target="_blank" rel="noopener noreferrer">Encryptor</a><span class="sw-sep">/</span><span class="sw-item active">Viewer</span></div>
   </div>
 
   <div class="nav-spacer"></div>
 
-  <!-- Theme toggle -->
   <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="切換主題">🌙</button>
 
-  <!-- Switch doc button (only shown when a doc is loaded) -->
   <button class="open-btn" id="switchBtn" onclick="toggleGistPanel()" style="display:none;">
     <span id="switchBtnIcon">🔀 </span><span class="btn-label">切換文件</span>
   </button>
 
-  <!-- Main right button: 加密文件 ↔ 返回文件 -->
   <button class="open-btn" id="openBtn" onclick="navBtnClick()">
     <span id="openBtnIcon">🔒 </span><span class="btn-label" id="openBtnLabel">加密文件</span>
   </button>
 </nav>
 
-<!-- ── Gist input panel ───────────────────────────────────────── -->
+<!-- ── Gist input panel ───────────────────────────────────────────── -->
 <div id="gistPanel">
   <div class="gist-inner">
     <input id="gistInput" type="text"
@@ -484,21 +647,20 @@ nav {
     <button class="gist-go" id="gistGoBtn" onclick="goGist()">開啟 →</button>
   </div>
   <p class="gist-hint">貼上對方傳給你的分享連結，或直接輸入 Gist ID · 不需要登入</p>
-  <!-- Re-unlock row: visible when encryptedData is in memory -->
-  <div id="reUnlockRow" style="display:none; text-align:center; padding:0 1rem 1rem; font-size:.8rem; color:var(--text-dim);">
-    已有載入的加密文件　<a href="javascript:goRelock()" style="color:var(--accent);text-decoration:none;" id="relockLink">查看 →</a>
+  <div id="reUnlockRow" style="display:none;">
+    已有載入的文件　<a href="javascript:goRelock()" id="relockLink">查看 →</a>
     ／
-    <a href="javascript:clearEncrypted()" style="color:var(--muted);text-decoration:none;">清除</a>
+    <a href="javascript:clearEncrypted()" style="color:var(--muted);">清除</a>
   </div>
 </div>
 
-<!-- ── Screen: Editor ─────────────────────────────────────────── -->
+<!-- ── Screen: Editor ─────────────────────────────────────────────── -->
 <div class="screen active" id="screen-editor">
 
   <!-- Desktop split -->
   <div class="editor-split">
     <div class="split-pane">
-      <div class="pane-label" style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="pane-label">
         <span>Markdown</span>
         <button class="ec-btn" id="copyMdBtn" onclick="copyEditorMd()">複製 Markdown</button>
       </div>
@@ -507,7 +669,7 @@ nav {
         spellcheck="false"></textarea>
     </div>
     <div class="split-pane">
-      <div class="pane-label" style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="pane-label">
         <span>預覽</span>
         <button class="ec-btn" id="copyPreviewBtn" onclick="copyEditorPreview()">複製純文字</button>
       </div>
@@ -521,8 +683,11 @@ nav {
 
   <!-- Mobile single pane -->
   <div class="mobile-editor">
-    <!-- Mobile copy row: adapts to current tab -->
     <div class="editor-copy-row">
+      <div class="view-toggle-pill" id="mobileTogglePill">
+        <button id="pillEdit" class="active" onclick="mobileTab('edit')">✏️ 編輯</button>
+        <button id="pillPreview" onclick="mobileTab('preview')">👁 預覽</button>
+      </div>
       <button class="ec-btn" id="mCopyBtn" onclick="copyEditorMobile()">複製 Markdown</button>
     </div>
     <div class="m-pane active" id="mobileEditPane">
@@ -539,32 +704,57 @@ nav {
     </div>
   </div>
 
+  <footer class="site-footer">
+    © <span class="cp-year"></span>
+    <a href="https://github.com/wenhsi" target="_blank" rel="noopener noreferrer" class="credit-link">wenhsi</a>
+    ·
+    <a href="https://github.com/wenhsi/mdlock-viewer" target="_blank" rel="noopener noreferrer" class="credit-link">GitHub</a>
+  </footer>
+
 </div>
 
-<!-- ── Screen: Loading ────────────────────────────────────────── -->
+<!-- ── Screen: Loading ────────────────────────────────────────────── -->
 <div class="screen" id="screen-loading">
-  <div class="spinner"></div>
-  <div class="loading-txt">正在讀取加密內容…</div>
-</div>
-
-<!-- ── Screen: Lock ───────────────────────────────────────────── -->
-<div class="screen" id="screen-lock">
-  <div class="lock-card">
-    <div class="lock-icon">🔒</div>
-    <h2>加密文件</h2>
-    <p>這份文件由分享者加密並上傳至其 GitHub Gist，請輸入他們提供的密碼查看。</p>
-    <div class="lock-meta" id="lockMeta"></div>
-    <div class="inp-wrap">
-      <input type="password" id="lockPw" placeholder="輸入密碼…" autocomplete="current-password" />
-      <span class="eye" onclick="toggleLockPw()">👁</span>
+  <div class="loading-center">
+    <div class="loading-dots">
+      <span></span><span></span><span></span>
     </div>
-    <button class="unlock-btn" id="unlockBtn" onclick="tryDecrypt()">解鎖查看</button>
-    <div class="form-err" id="lockErr"></div>
-    <a class="back-link" onclick="goHome()">← 返回</a>
+    <div class="loading-txt">正在讀取內容…</div>
   </div>
+  <footer class="site-footer">
+    © <span class="cp-year"></span>
+    <a href="https://github.com/wenhsi" target="_blank" rel="noopener noreferrer" class="credit-link">wenhsi</a>
+    ·
+    <a href="https://github.com/wenhsi/mdlock-viewer" target="_blank" rel="noopener noreferrer" class="credit-link">GitHub</a>
+  </footer>
 </div>
 
-<!-- ── Screen: Decrypted ──────────────────────────────────────── -->
+<!-- ── Screen: Lock ───────────────────────────────────────────────── -->
+<div class="screen" id="screen-lock">
+  <div class="lock-center">
+    <div class="lock-card">
+      <div class="lock-icon">🔒</div>
+      <h2>加密文件</h2>
+      <p>這份文件由分享者加密並上傳至其 GitHub Gist，請輸入他們提供的密碼查看。</p>
+      <div class="lock-meta" id="lockMeta"></div>
+      <div class="inp-wrap">
+        <input type="password" id="lockPw" placeholder="輸入密碼…" autocomplete="current-password" />
+        <span class="eye" onclick="toggleLockPw()">👁</span>
+      </div>
+      <button class="unlock-btn" id="unlockBtn" onclick="tryDecrypt()">解鎖查看</button>
+      <div class="form-err" id="lockErr"></div>
+      <a class="back-link" onclick="goHome()">← 返回</a>
+    </div>
+  </div>
+  <footer class="site-footer">
+    © <span class="cp-year"></span>
+    <a href="https://github.com/wenhsi" target="_blank" rel="noopener noreferrer" class="credit-link">wenhsi</a>
+    ·
+    <a href="https://github.com/wenhsi/mdlock-viewer" target="_blank" rel="noopener noreferrer" class="credit-link">GitHub</a>
+  </footer>
+</div>
+
+<!-- ── Screen: Decrypted ──────────────────────────────────────────── -->
 <div class="screen" id="screen-decrypted">
 
   <div class="action-bar">
@@ -573,12 +763,10 @@ nav {
       <span class="chip-unlocked">🔓 已解密</span>
     </div>
     <div class="action-bar-right">
-      <!-- Toggle: 預覽 ↔ Markdown (fixed width via ghost span) -->
       <button class="ab-btn ab-btn-fixed" id="viewToggleBtn" onclick="toggleDecryptView()">
         <span class="btn-ghost">查看 Markdown</span>
         <span class="btn-real" id="viewToggleTxt">查看 Markdown</span>
       </button>
-      <!-- Copy: label changes with view (fixed width via ghost span) -->
       <button class="ab-btn ab-btn-fixed" id="copyBtn" onclick="copyDecrypted()">
         <span class="btn-ghost">複製 Markdown</span>
         <span class="btn-real" id="copyBtnTxt">複製純文字</span>
@@ -586,25 +774,30 @@ nav {
     </div>
   </div>
 
-  <!-- Rendered reading view (default) -->
   <div class="reading-area" id="decryptRenderedArea">
     <div class="reading-inner">
       <div class="md" id="decryptedContent"></div>
     </div>
   </div>
 
-  <!-- Raw markdown view -->
   <div id="rawSourceArea" style="display:none;">
     <div class="raw-source-inner">
       <pre id="rawSourcePre"></pre>
     </div>
   </div>
 
+  <footer class="site-footer">
+    © <span class="cp-year"></span>
+    <a href="https://github.com/wenhsi" target="_blank" rel="noopener noreferrer" class="credit-link">wenhsi</a>
+    ·
+    <a href="https://github.com/wenhsi/mdlock-viewer" target="_blank" rel="noopener noreferrer" class="credit-link">GitHub</a>
+  </footer>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
 <script>
-// ── Theme ─────────────────────────────────────────────────────
+// ── Theme ─────────────────────────────────────────────────────────
 (function() {
   const saved = localStorage.getItem('theme');
   const sys   = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -621,11 +814,11 @@ function toggleTheme() {
   setTheme(cur === 'dark' ? 'light' : 'dark');
 }
 
-// ── State ─────────────────────────────────────────────────────
+// ── State ──────────────────────────────────────────────────────────
 let encryptedData = null;
 let rawMd         = '';
 let decryptInMd   = false;
-let wasEncrypted  = false;  // false = plain markdown, true = AES decrypted   // false = rendered view, true = markdown source view
+let wasEncrypted  = false;  // false = plain markdown, true = AES decrypted
 
 const SCREENS = ['screen-editor','screen-loading','screen-lock','screen-decrypted'];
 function showScreen(id) {
@@ -644,16 +837,13 @@ function updateNav() {
   document.getElementById('switchBtn').style.display  = hasDoc ? '' : 'none';
   document.getElementById('openBtnLabel').textContent = hasDoc ? '返回文件' : '加密文件';
   document.getElementById('openBtnIcon').textContent  = hasDoc ? '📄 ' : '🔒 ';
-  // Highlight "返回文件" when already on the decrypted screen (disabled-like highlight)
   const openBtn = document.getElementById('openBtn');
   openBtn.classList.toggle('active', hasDoc && onDecrypt);
   openBtn.style.pointerEvents = (hasDoc && onDecrypt) ? 'none' : '';
 }
 
-// What the main right button does depends on state
 function navBtnClick() {
   if (rawMd) {
-    // Return to currently loaded doc
     closeGistPanel();
     showDecrypted();
   } else {
@@ -665,16 +855,15 @@ function closeGistPanel() {
   panel.classList.remove('open', 'has-more');
   document.getElementById('reUnlockRow').style.display = 'none';
   document.getElementById('switchBtn').classList.remove('active');
-  updateNav(); // re-applies correct active state for openBtn
+  updateNav();
 }
 
-// ── Init ──────────────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   const gistId = new URLSearchParams(location.search).get('gist');
   if (gistId) { loadGist(gistId); }
   else { showScreen('screen-editor'); }
 
-  // Sync desktop ↔ mobile editors
   document.getElementById('mdEditor').addEventListener('input', function() {
     document.getElementById('mdEditorM').value = this.value;
     renderEditorPreview(this.value);
@@ -688,7 +877,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') tryDecrypt();
   });
 
-  // Close gist panel when tapping outside nav/panel (especially on mobile)
   document.addEventListener('click', e => {
     const panel = document.getElementById('gistPanel');
     if (!panel.classList.contains('open')) return;
@@ -707,8 +895,8 @@ function renderEditorPreview(md) {
   document.getElementById('editorPreviewM').innerHTML = html;
 }
 
-// ── Mobile tab toggle ─────────────────────────────────────────
-let mobileEditorTab = 'edit';   // track current tab for copy logic
+// ── Mobile tab toggle ──────────────────────────────────────────────
+let mobileEditorTab = 'edit';
 function mobileTab(tab) {
   mobileEditorTab = tab;
   const toEdit    = tab === 'edit';
@@ -720,23 +908,18 @@ function mobileTab(tab) {
   if (!toEdit) renderEditorPreview(document.getElementById('mdEditorM').value);
 }
 
-// ── Editor copy functions ─────────────────────────────────────
+// ── Editor copy ────────────────────────────────────────────────────
 function copyEditorMd() {
-  const text = document.getElementById('mdEditor').value;
-  _doCopy(text, document.getElementById('copyMdBtn'));
+  _doCopy(document.getElementById('mdEditor').value, document.getElementById('copyMdBtn'));
 }
 function copyEditorPreview() {
-  const text = document.getElementById('editorPreview').innerText || '';
-  _doCopy(text, document.getElementById('copyPreviewBtn'));
+  _doCopy(document.getElementById('editorPreview').innerText || '', document.getElementById('copyPreviewBtn'));
 }
 function copyEditorMobile() {
-  const btn = document.getElementById('mCopyBtn');
-  let text;
-  if (mobileEditorTab === 'edit') {
-    text = document.getElementById('mdEditorM').value;
-  } else {
-    text = document.getElementById('editorPreviewM').innerText || '';
-  }
+  const btn  = document.getElementById('mCopyBtn');
+  const text = mobileEditorTab === 'edit'
+    ? document.getElementById('mdEditorM').value
+    : document.getElementById('editorPreviewM').innerText || '';
   _doCopy(text, btn);
 }
 function _doCopy(text, btn) {
@@ -747,12 +930,11 @@ function _doCopy(text, btn) {
   });
 }
 
-// ── Gist panel ────────────────────────────────────────────────
+// ── Gist panel ─────────────────────────────────────────────────────
 function toggleGistPanel() {
   const panel = document.getElementById('gistPanel');
   const open  = !panel.classList.contains('open');
   panel.classList.toggle('open', open);
-  // Highlight whichever button triggered this
   document.getElementById('openBtn').classList.toggle('active', open && !rawMd);
   document.getElementById('switchBtn').classList.toggle('active', open && !!rawMd);
   const hasMore = open && !!encryptedData;
@@ -770,9 +952,7 @@ function toggleGistPanel() {
 function goRelock() {
   document.getElementById('gistPanel').classList.remove('open');
   document.getElementById('openBtn').classList.remove('active');
-  // Already decrypted this session — skip password
   if (rawMd) { showDecrypted(); return; }
-  // Otherwise show lock screen
   document.getElementById('lockPw').value = '';
   document.getElementById('lockErr').textContent = '';
   document.getElementById('unlockBtn').disabled = false;
@@ -793,11 +973,13 @@ function goGist() {
   if (!id) {
     const el = document.getElementById('gistInput');
     el.style.borderColor = 'var(--red)';
-    setTimeout(() => el.style.borderColor = '', 1800);
+    el.style.boxShadow   = '0 0 0 3px rgba(247,101,96,.15)';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 1800);
     return;
   }
   document.getElementById('gistPanel').classList.remove('open');
   document.getElementById('openBtn').classList.remove('active');
+  document.getElementById('switchBtn').classList.remove('active');
   loadGist(id);
 }
 
@@ -808,9 +990,8 @@ function extractGistId(s) {
   return null;
 }
 
-// ── Load Gist ─────────────────────────────────────────────────
+// ── Load Gist ──────────────────────────────────────────────────────
 function looksEncrypted(content) {
-  // Our cipher: pure base64 string, no spaces/newlines, length > 60
   const s = content.trim();
   return s.length > 60 && /^[A-Za-z0-9+/]+=*$/.test(s);
 }
@@ -828,7 +1009,6 @@ async function loadGist(id) {
     const content = files[0].content;
 
     if (looksEncrypted(content)) {
-      // Encrypted: show lock screen
       encryptedData = content;
       document.getElementById('lockMeta').textContent = `Gist ID: ${id}`;
       document.getElementById('lockPw').value = '';
@@ -838,7 +1018,6 @@ async function loadGist(id) {
       showScreen('screen-lock');
       document.getElementById('lockPw').focus();
     } else {
-      // Plain markdown: render directly without password
       encryptedData = null;
       wasEncrypted  = false;
       rawMd = content;
@@ -850,7 +1029,7 @@ async function loadGist(id) {
   }
 }
 
-// ── Crypto ────────────────────────────────────────────────────
+// ── Crypto ─────────────────────────────────────────────────────────
 async function deriveKey(password, salt) {
   const raw = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
@@ -888,7 +1067,7 @@ async function tryDecrypt() {
   }
 }
 
-// ── Decrypted view ────────────────────────────────────────────
+// ── Decrypted view ─────────────────────────────────────────────────
 function showDecrypted() {
   decryptInMd = false;
   document.getElementById('decryptedContent').innerHTML = renderMd(rawMd);
@@ -906,10 +1085,8 @@ function showDecrypted() {
 function toggleDecryptView() {
   decryptInMd = !decryptInMd;
   const btn       = document.getElementById('viewToggleBtn');
-  const copyBtn   = document.getElementById('copyBtn');
   const rendered  = document.getElementById('decryptRenderedArea');
   const rawArea   = document.getElementById('rawSourceArea');
-
   if (decryptInMd) {
     rendered.style.display = 'none';
     rawArea.style.display  = '';
@@ -936,14 +1113,19 @@ function copyDecrypted() {
   });
 }
 
-// ── Navigation ────────────────────────────────────────────────
+// ── Navigation ─────────────────────────────────────────────────────
 function goHome() {
   showScreen('screen-editor');
   history.replaceState({}, '', location.pathname);
   updateNav();
 }
 
-// ── Render ────────────────────────────────────────────────────
+// ── Copyright year ─────────────────────────────────────────────────
+document.querySelectorAll('.cp-year').forEach(el => {
+  el.textContent = new Date().getFullYear();
+});
+
+// ── Render ─────────────────────────────────────────────────────────
 function renderMd(md) {
   if (typeof marked !== 'undefined') {
     marked.setOptions({ breaks: true, gfm: true });
