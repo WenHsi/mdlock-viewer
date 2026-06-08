@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔒 加密文件</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1e293b; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+/* ── States ── */
+#state-loading,
+#state-lock,
+#state-error,
+#state-content { display: none; }
+
+/* ── Loading ── */
+#state-loading {
+  min-height: 100vh;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 1rem;
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #334155;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: #64748b; font-size: .9rem; }
+
+/* ── Lock ── */
+#state-lock {
+  min-height: 100vh;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 400px; width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,.5);
+}
+.lock-icon { font-size: 3.5rem; margin-bottom: 1.25rem; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.card h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: .375rem; }
+.card p { color: #64748b; font-size: .9rem; margin-bottom: 2rem; }
+.inp-wrap { position: relative; margin-bottom: .875rem; }
+.inp-wrap input {
+  width: 100%; padding: .8rem 2.75rem .8rem 1rem;
+  background: #0f172a; border: 1px solid #334155; border-radius: 10px;
+  color: #e2e8f0; font-size: 1rem; outline: none;
+  transition: border-color .2s;
+  font-family: inherit;
+}
+.inp-wrap input:focus { border-color: #6366f1; }
+.eye {
+  position: absolute; right: .85rem; top: 50%; transform: translateY(-50%);
+  cursor: pointer; color: #475569; font-size: 1rem; user-select: none;
+}
+.eye:hover { color: #94a3b8; }
+.unlock-btn {
+  width: 100%; padding: .85rem;
+  background: #6366f1; color: #fff; border: none;
+  border-radius: 10px; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: background .2s, transform .1s;
+  font-family: inherit;
+}
+.unlock-btn:hover { background: #4f46e5; }
+.unlock-btn:active { transform: scale(.97); }
+.unlock-btn:disabled { background: #334155; color: #475569; cursor: default; transform: none; }
+.err { color: #f87171; font-size: .85rem; margin-top: .75rem; min-height: 1.2em; }
+
+/* ── Error ── */
+#state-error {
+  min-height: 100vh;
+  align-items: center; justify-content: center;
+  padding: 1rem; text-align: center; flex-direction: column; gap: .75rem;
+}
+.err-icon { font-size: 3rem; }
+.err-title { font-size: 1.25rem; font-weight: 700; }
+.err-msg { color: #64748b; font-size: .875rem; max-width: 360px; }
+
+/* ── Content ── */
+#state-content { padding: 3rem 1.5rem; max-width: 860px; margin: 0 auto; }
+.content-bar {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 2.5rem; padding-bottom: 1.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+.unlocked-badge {
+  font-size: .8rem; color: #4ade80;
+  background: rgba(74,222,128,.1);
+  padding: .25rem .75rem; border-radius: 999px;
+  border: 1px solid rgba(74,222,128,.2);
+}
+
+/* ── Markdown ── */
+.md { line-height: 1.75; font-size: 1rem; }
+.md h1,.md h2,.md h3,.md h4 { margin: 2rem 0 .75rem; font-weight: 700; line-height: 1.3; }
+.md h1 { font-size: 2rem; border-bottom: 1px solid #1e293b; padding-bottom: .5rem; }
+.md h2 { font-size: 1.5rem; }
+.md h3 { font-size: 1.25rem; }
+.md h4 { font-size: 1rem; }
+.md p { margin-bottom: 1rem; }
+.md a { color: #818cf8; text-decoration: none; }
+.md a:hover { text-decoration: underline; }
+.md ul,.md ol { padding-left: 1.75rem; margin-bottom: 1rem; }
+.md li { margin-bottom: .25rem; }
+.md blockquote { border-left: 3px solid #6366f1; padding: .5rem 1rem; background: #1e293b; border-radius: 0 8px 8px 0; margin-bottom: 1rem; color: #94a3b8; }
+.md code { background: #1e293b; padding: .15em .45em; border-radius: 5px; font-family: 'SF Mono','Fira Code',monospace; font-size: .875em; color: #a5b4fc; }
+.md pre { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1.25rem; overflow-x: auto; margin-bottom: 1rem; }
+.md pre code { background: none; padding: 0; font-size: .875rem; color: #e2e8f0; }
+.md table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: .9rem; }
+.md th,.md td { border: 1px solid #334155; padding: .6rem 1rem; text-align: left; }
+.md th { background: #1e293b; font-weight: 600; }
+.md tr:nth-child(even) { background: rgba(30,41,59,.5); }
+.md hr { border: none; border-top: 1px solid #1e293b; margin: 2rem 0; }
+.md img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+.md strong { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="state-loading" style="display:flex;">
+  <div class="spinner"></div>
+  <div class="loading-text">正在讀取加密內容...</div>
+</div>
+
+<!-- Lock screen -->
+<div id="state-lock" style="display:none;">
+  <div class="card">
+    <div class="lock-icon">🔒</div>
+    <h1>加密文件</h1>
+    <p>此文件已加密保護，請輸入密碼以查看內容</p>
+    <div class="inp-wrap">
+      <input type="password" id="pw" placeholder="輸入密碼..." autocomplete="current-password" />
+      <span class="eye" onclick="togglePw()">👁</span>
+    </div>
+    <button class="unlock-btn" id="unlockBtn" onclick="tryDecrypt()">解鎖查看</button>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+
+<!-- Error -->
+<div id="state-error" style="display:none;">
+  <div class="err-icon">⚠️</div>
+  <div class="err-title">無法載入文件</div>
+  <div class="err-msg" id="errMsg">找不到指定的加密內容，連結可能已失效。</div>
+</div>
+
+<!-- Content -->
+<div id="state-content" style="display:none;">
+  <div class="content-bar">
+    <span style="font-size:1.25rem;">🔓</span>
+    <span style="font-weight:600;font-size:1.1rem;">文件內容</span>
+    <span class="unlocked-badge">已解密</span>
+  </div>
+  <div class="md" id="mdContent"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<script>
+// ─── State management ─────────────────────────────────────────────────────────
+function show(id) {
+  ['state-loading','state-lock','state-error','state-content'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? (id === 'state-lock' || id === 'state-error' ? 'flex' : 'block') : 'none';
+  });
+}
+
+// ─── Crypto ───────────────────────────────────────────────────────────────────
+async function deriveKey(password, salt) {
+  const raw = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 120000, hash: 'SHA-256' },
+    raw, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+  );
+}
+async function decrypt(b64, password) {
+  const buf = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const key = await deriveKey(password, buf.slice(0, 16));
+  const pt  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(16, 28) }, key, buf.slice(28));
+  return new TextDecoder().decode(pt);
+}
+
+// ─── Load encrypted data ──────────────────────────────────────────────────────
+let encryptedData = null;
+
+async function init() {
+  const params = new URLSearchParams(location.search);
+  const gistId = params.get('gist');
+
+  if (!gistId) {
+    showError('URL 中缺少 gist 參數，請確認連結是否完整。');
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // 找第一個檔案的內容
+    const files = Object.values(data.files);
+    if (!files.length) throw new Error('Gist 是空的');
+    encryptedData = files[0].content;
+
+    show('state-lock');
+    document.getElementById('pw').focus();
+  } catch (e) {
+    showError(`無法讀取 Gist：${e.message}`);
+  }
+}
+
+function showError(msg) {
+  document.getElementById('errMsg').textContent = msg;
+  show('state-error');
+}
+
+// ─── Decrypt & render ─────────────────────────────────────────────────────────
+function togglePw() {
+  const el = document.getElementById('pw');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+async function tryDecrypt() {
+  const pw  = document.getElementById('pw').value;
+  const err = document.getElementById('err');
+  const btn = document.getElementById('unlockBtn');
+  err.textContent = '';
+
+  if (!pw) { err.textContent = '請輸入密碼'; return; }
+  btn.disabled = true; btn.textContent = '解密中...';
+
+  try {
+    const md = await decrypt(encryptedData, pw);
+    show('state-content');
+    const rendered = typeof marked !== 'undefined' ? marked.parse(md) : md.replace(/\n/g, '<br>');
+    document.getElementById('mdContent').innerHTML = rendered;
+  } catch {
+    err.textContent = '密碼錯誤，請再試一次';
+    btn.disabled = false; btn.textContent = '解鎖查看';
+    document.getElementById('pw').select();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryDecrypt(); });
+  init();
+});
+</script>
+</body>
+</html>
